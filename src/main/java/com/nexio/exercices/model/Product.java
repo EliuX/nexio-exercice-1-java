@@ -1,4 +1,4 @@
-package com.nexio.excercices.model;
+package com.nexio.exercices.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -19,7 +19,7 @@ public class Product {
     private String name;
 
     @DecimalMin(value = "0.0", inclusive = true)
-    @Digits(integer = 4, fraction = 2)
+    @Digits(integer = 3, fraction = 2)
     private BigDecimal price;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -27,14 +27,19 @@ public class Product {
     private ProductDetails productDetails;
 
     Product() {
-        this("Pas de produit", BigDecimal.ZERO, ProductDetails.NULL_PRODUCT_DETAILS);
+        this("Pas de produit", BigDecimal.ZERO);
+    }
+
+    public Product(String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
+        this.productDetails = ProductDetails.NULL_PRODUCT_DETAILS;
     }
 
     public Product(String name, BigDecimal price, ProductDetails productDetails) {
         this.name = name;
         this.price = price;
-        this.productDetails = productDetails;
-        this.productDetails.setProduct(this);
+        setProductDetails(productDetails);
     }
 
     public Long getId() {
@@ -62,12 +67,16 @@ public class Product {
     }
 
     public void setProductDetails(ProductDetails productDetails) {
+        if (productDetails != null) {
+            productDetails.setProduct(this);
+        }
+
         this.productDetails = productDetails;
     }
 
     @Override
     public String toString() {
-        return String.format("%s (%.2f CAD)", getName(), getPrice());
+        return String.format("Product {name: %s, price: %.2f CAD}", getName(), getPrice());
     }
 
     @Override
@@ -76,12 +85,11 @@ public class Product {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return Objects.equals(getName(), product.getName()) &&
-                Objects.equals(getPrice(), product.getPrice()) &&
-                Objects.equals(getProductDetails(), product.getProductDetails());
+                Objects.equals(getPrice(), product.getPrice());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getPrice(), getProductDetails());
+        return Objects.hash(getName(), getPrice());
     }
 }

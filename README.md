@@ -1,4 +1,4 @@
-EXCERCICE 1 JAVA
+EXERCICE 1 JAVA
 ====================
 
 ## Énoncé
@@ -38,15 +38,20 @@ prochaines étapes:
 1. Installez les dépendances    
 
 ```bash
-mvn install
+mvn clean install
 ```
 
 2. Exécutez l'application
 
 ```bash
-mvn spring-boot:run
+java -jar target/nexio-exercice1.jar --number-of-products=20
 ```
 
+Le paramètre `number-of-products` indiquera la quantité des produits avec
+lesquels sera rempli la base de données.
+
+Si vous voulez vous pouvez changer le packaging à `war` pour livrer 
+l'applis dans un serveur comme le Tomcat.
 
 ### Author
 **Eliecer Hernandez** - [eliecerhdz@gmail.com](mailto:eliecerhdz@gmail.com). 

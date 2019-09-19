@@ -1,6 +1,6 @@
-package com.nexio.excercices.utils;
+package com.nexio.exercices.utils;
 
-import com.nexio.excercices.model.Product;
+import com.nexio.exercices.model.Product;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,13 +30,19 @@ public class UtilsTest {
 
         Assert.assertEquals("The price should have no more than 4 digits",
                 -1,
-                product.getPrice().compareTo(BigDecimal.valueOf(10000))
+                product.getPrice().compareTo(BigDecimal.valueOf(999))
         );
     }
 
     @Test
-    public void generateProduct_shouldGenerateValidProductDetails() {
-        final Product product = Utils.generateProduct(true);
+    public void generateProductWithDetails_shouldGenerateValidProductDetails() {
+        final Product product = Utils.generateProductWithDetails(true);
+
+        Assert.assertNotNull(
+                "The product should not be null",
+                product
+        );
+
 
         Assert.assertNotNull(
                 "The productDetails should not be null",
@@ -46,9 +52,12 @@ public class UtilsTest {
         final int pdDescriptionLength = product.getProductDetails()
                 .getDescription().length();
         Assert.assertTrue(
-                "The product detail description should " +
-                        "be between 3 and 500 chars",
-                pdDescriptionLength >= 3 && pdDescriptionLength <= 500
+                "The product detail description should have no less than 3 chars",
+                pdDescriptionLength >= 3
+        );
+        Assert.assertTrue(
+                "The product detail description should have no more than 500 chars",
+                pdDescriptionLength <= 500
         );
 
         Assert.assertNotNull(
@@ -64,8 +73,8 @@ public class UtilsTest {
     }
 
     @Test
-    public void generateProduct_shouldGenerateAnEdibleProduct() {
-        final Product product = Utils.generateProduct(true);
+    public void generateProductWithDetails_shouldGenerateAnEdibleProduct() {
+        final Product product = Utils.generateProductWithDetails(true);
 
         Assert.assertTrue(
                 "The product should be edible",
@@ -79,8 +88,8 @@ public class UtilsTest {
     }
 
     @Test
-    public void generateProduct_shouldGenerateANonEdibleProduct() {
-        final Product product = Utils.generateProduct(false);
+    public void generateProductWithDetails_shouldGenerateANonEdibleProduct() {
+        final Product product = Utils.generateProductWithDetails(false);
 
         Assert.assertFalse(
                 "The product should not be edible",

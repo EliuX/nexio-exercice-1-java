@@ -3,9 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.eliux</groupId>
-    <artifactId>nexio-excercice1</artifactId>
+
+    <artifactId>nexio-exercice1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Excercice 1 for Nexio</name>
+    <packaging>war</packaging>
+
+    <name>Exercice 1 pour Nexio</name>
     <description>Test Java pour Nexio</description>
 
     <properties>
@@ -15,6 +18,7 @@
     </properties>
 
     <dependencies>
+        <!-- Spring MVC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -22,8 +26,23 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
 
         <!-- Data -->
@@ -43,9 +62,25 @@
             <artifactId>javafaker</artifactId>
             <version>1.0.1</version>
         </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Pendant le développement permet recharger rapidement le contexte de Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <finalName>nexio-exercice1</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -58,12 +93,21 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
         </plugins>

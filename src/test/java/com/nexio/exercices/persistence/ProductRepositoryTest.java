@@ -1,7 +1,7 @@
-package com.nexio.excercices.persistence;
+package com.nexio.exercices.persistence;
 
-import com.nexio.excercices.model.Product;
-import com.nexio.excercices.utils.Utils;
+import com.nexio.exercices.model.Product;
+import com.nexio.exercices.utils.Utils;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class ProductRepositoryTest {
 
     @Before
     public void persistProduct() {
-        savedProduct = Utils.generateProduct(true);
+        savedProduct = Utils.generateProductWithDetails(true);
         entityManager.persist(savedProduct);
     }
 

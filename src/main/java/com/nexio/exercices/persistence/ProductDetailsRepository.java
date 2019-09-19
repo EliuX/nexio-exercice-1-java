@@ -1,6 +1,6 @@
-package com.nexio.excercices.persistence;
+package com.nexio.exercices.persistence;
 
-import com.nexio.excercices.model.ProductDetails;
+import com.nexio.exercices.model.ProductDetails;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

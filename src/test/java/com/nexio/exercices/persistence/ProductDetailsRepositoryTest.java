@@ -1,8 +1,8 @@
-package com.nexio.excercices.persistence;
+package com.nexio.exercices.persistence;
 
-import com.nexio.excercices.model.Product;
-import com.nexio.excercices.model.ProductDetails;
-import com.nexio.excercices.utils.Utils;
+import com.nexio.exercices.model.Product;
+import com.nexio.exercices.model.ProductDetails;
+import com.nexio.exercices.utils.Utils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,8 +14,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 
 @RunWith(SpringRunner.class)
@@ -30,7 +28,7 @@ public class ProductDetailsRepositoryTest {
 
     @Before
     public void persistProduct() {
-        savedProduct = Utils.generateProduct(true);
+        savedProduct = Utils.generateProductWithDetails(true);
         entityManager.persist(savedProduct);
     }
 
