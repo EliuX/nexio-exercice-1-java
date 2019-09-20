@@ -5,7 +5,6 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
 @Table(name = "product")
@@ -34,12 +33,6 @@ public class Product {
         this.name = name;
         this.price = price;
         this.productDetails = ProductDetails.NULL_PRODUCT_DETAILS;
-    }
-
-    public Product(String name, BigDecimal price, ProductDetails productDetails) {
-        this.name = name;
-        this.price = price;
-        setProductDetails(productDetails);
     }
 
     public Long getId() {
@@ -77,19 +70,5 @@ public class Product {
     @Override
     public String toString() {
         return String.format("Product {name: %s, price: %.2f CAD}", getName(), getPrice());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(getName(), product.getName()) &&
-                Objects.equals(getPrice(), product.getPrice());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName(), getPrice());
     }
 }

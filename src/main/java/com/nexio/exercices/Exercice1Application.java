@@ -2,7 +2,7 @@ package com.nexio.exercices;
 
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.persistence.ProductRepository;
-import com.nexio.exercices.utils.Utils;
+import com.nexio.exercices.utils.DataGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -50,7 +50,7 @@ public class Exercice1Application implements ApplicationRunner {
 
     private void generateSampleProducts(Integer amountOfProductsToGenerate) {
         for (int i = 0; i < amountOfProductsToGenerate; i++) {
-            final Product product = Utils.generateProductWithDetails(i % 2 == 0);
+            final Product product = DataGenerator.generateProductWithDetails(i % 2 == 0);
             final Product savedProduct = productRepository.save(product);
             LOG.info(String.format("Le produit \"%s\" a été ajouté avec succès", savedProduct));
         }

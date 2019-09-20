@@ -1,27 +1,29 @@
 package com.nexio.exercices.controller;
 
-import com.nexio.exercices.model.Product;
+import com.nexio.exercices.dto.ProductDetailsDto;
+import com.nexio.exercices.dto.ProductDto;
 import com.nexio.exercices.persistence.ProductRepository;
+import com.nexio.exercices.service.ProductDetailsService;
+import com.nexio.exercices.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.Collections;
+import java.util.List;
+
+@RestController
 @RequestMapping("/products")
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     @GetMapping
-    public ModelAndView showProductCatalogs() {
-        ModelAndView response = new ModelAndView("products/list");
-
-        final Iterable<Product> products = productRepository.findAll();
-        response.addObject("products", products);
-
-        return response;
+    public List<ProductDto> getProductsCatalog() {
+        return productService.getProducts();
     }
 }

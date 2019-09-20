@@ -7,12 +7,11 @@ import com.nexio.exercices.model.ProductDetails;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-///TODO rename to ContentGenerator or DataGenerator
-public final class Utils {
+public final class DataGenerator {
 
     private static final Faker faker = Faker.instance(Locale.CANADA_FRENCH);
 
-    private Utils() {
+    private DataGenerator() {
     }
 
     public static Product generateProductWithDetails(boolean isEdible) {

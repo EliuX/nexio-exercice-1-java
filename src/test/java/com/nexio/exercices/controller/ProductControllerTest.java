@@ -2,56 +2,70 @@ package com.nexio.exercices.controller;
 
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.persistence.ProductRepository;
-import com.nexio.exercices.utils.Utils;
+import com.nexio.exercices.utils.DataGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ProductControllerTest {
 
-    @LocalServerPort
-    private int port;
-
     @Autowired
-    private TestRestTemplate restTemplate;
+    private MockMvc mvc;
 
     @MockBean
     private ProductRepository productRepository;
 
     @Test
-    public void shouldNotHaveAnyProductsToShow() {
-        assertThat(this.restTemplate.getForObject(String.format("http://localhost:%d/products", port), String.class))
-                .contains("Pas de produits")
-                .doesNotContain("produits disponibles");
+    public void givenProducts_whenGetDetailsOfProduct_thenReturnJsonArray() throws Exception {
+        final Product product = DataGenerator.generateProduct(true);
+
+        given(productRepository.findAll()).willReturn(Arrays.asList(product));
+
+        mvc.perform(get("/products")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].name", is(product.getName())))
+                .andExpect(jsonPath("$[0].price", is(notNullValue())));
     }
 
     @Test
-    public void shouldHaveListed5Products() {
-        int COUNT_OF_PRODUCTS_TO_ADD = 5;
-        final List<Product> products = Stream.generate(() -> Utils.generateProductWithDetails(false))
-                .limit(COUNT_OF_PRODUCTS_TO_ADD)
-                .collect(Collectors.toList());
-        when(productRepository.findAll()).thenReturn(products);
+    public void givenNoProducts_whenGetProductsCatalog_thenReturnEmptyJsonArray() throws Exception {
+        final Product product = DataGenerator.generateProduct(true);
 
-        assertThat(this.restTemplate.getForObject(String.format("http://localhost:%d/products", port), String.class))
-                .doesNotContain("Pas de produits")
-                .contains(String.format("Il y à %d produits disponibles", COUNT_OF_PRODUCTS_TO_ADD));
+        given(productRepository.findAll()).willReturn(Collections.emptyList());
 
-        productRepository.deleteAll();
+        mvc.perform(get("/products")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }

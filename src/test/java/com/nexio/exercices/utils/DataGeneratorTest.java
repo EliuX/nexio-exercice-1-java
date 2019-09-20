@@ -6,11 +6,11 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-public class UtilsTest {
+public class DataGeneratorTest {
 
     @Test
     public void generateProduct_shouldGenerateValidProduct() {
-        final Product product = Utils.generateProduct(true);
+        final Product product = DataGenerator.generateProduct(true);
 
         final int productNameLength = product.getName().length();
         Assert.assertTrue(
@@ -36,7 +36,7 @@ public class UtilsTest {
 
     @Test
     public void generateProductWithDetails_shouldGenerateValidProductDetails() {
-        final Product product = Utils.generateProductWithDetails(true);
+        final Product product = DataGenerator.generateProductWithDetails(true);
 
         Assert.assertNotNull(
                 "The product should not be null",
@@ -74,7 +74,7 @@ public class UtilsTest {
 
     @Test
     public void generateProductWithDetails_shouldGenerateAnEdibleProduct() {
-        final Product product = Utils.generateProductWithDetails(true);
+        final Product product = DataGenerator.generateProductWithDetails(true);
 
         Assert.assertTrue(
                 "The product should be edible",
@@ -89,7 +89,7 @@ public class UtilsTest {
 
     @Test
     public void generateProductWithDetails_shouldGenerateANonEdibleProduct() {
-        final Product product = Utils.generateProductWithDetails(false);
+        final Product product = DataGenerator.generateProductWithDetails(false);
 
         Assert.assertFalse(
                 "The product should not be edible",

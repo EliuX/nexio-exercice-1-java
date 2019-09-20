@@ -2,64 +2,67 @@ package com.nexio.exercices.controller;
 
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.persistence.ProductDetailsRepository;
-import com.nexio.exercices.utils.Utils;
+import com.nexio.exercices.utils.DataGenerator;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ProductDetailsControllerTest {
 
-    @LocalServerPort
-    private int port;
-
     @Autowired
-    private TestRestTemplate restTemplate;
+    private MockMvc mvc;
 
     @MockBean
     private ProductDetailsRepository productDetailsRepository;
 
-
     @Test
-    public void shouldShowPageOfDetailsOfProduct() {
-        final Product existingProduct = Utils.generateProductWithDetails(true);
+    public void givenProductDetails_whenGetDetailsOfProduct_thenReturnJson() throws Exception {
+        final Product existingProduct = DataGenerator.generateProductWithDetails(true);
         when(productDetailsRepository.findByProductId(anyLong()))
                 .thenReturn(Optional.of(existingProduct.getProductDetails()));
 
-        assertThat(this.restTemplate.getForObject(
-                String.format("http://localhost:%d/products/1/details", port),
-                String.class
-        ))
-                .contains(existingProduct.getName())
-                .contains(existingProduct.getProductDetails().getDescription());
+        mvc.perform(get("/products/1/details")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.edible", is(true)))
+                .andExpect(jsonPath(
+                        "$.description",
+                        is(existingProduct.getProductDetails().getDescription())
+                ));
     }
 
     @Test
-    public void shouldReturn404IfProductIsNotFound() {
+    public void givenNoProductDetails_whenGetDetailsOfProduct_thenNotFoundStatusWithEmptyJson()
+            throws Exception {
         when(productDetailsRepository.findByProductId(anyLong()))
                 .thenReturn(Optional.empty());
 
-        final ResponseEntity<String> result = this.restTemplate.getForEntity(
-                String.format("http://localhost:%d/products/1/details", port),
-                String.class);
-
-        assertThat(result.getStatusCodeValue()).isEqualTo(404);
-        assertThat(result.getBody()).contains("404");
+        mvc.perform(get("/products/1/details")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
     @After

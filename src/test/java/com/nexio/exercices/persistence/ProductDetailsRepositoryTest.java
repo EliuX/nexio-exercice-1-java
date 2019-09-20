@@ -2,7 +2,7 @@ package com.nexio.exercices.persistence;
 
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.model.ProductDetails;
-import com.nexio.exercices.utils.Utils;
+import com.nexio.exercices.utils.DataGenerator;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,7 +19,6 @@ import java.util.Optional;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class ProductDetailsRepositoryTest {
-
     Product savedProduct;
     @Autowired
     private TestEntityManager entityManager;
@@ -28,7 +27,7 @@ public class ProductDetailsRepositoryTest {
 
     @Before
     public void persistProduct() {
-        savedProduct = Utils.generateProductWithDetails(true);
+        savedProduct = DataGenerator.generateProductWithDetails(true);
         entityManager.persist(savedProduct);
     }
 

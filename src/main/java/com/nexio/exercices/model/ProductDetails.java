@@ -62,30 +62,4 @@ public class ProductDetails {
     public void setEdible(Boolean edible) {
         this.edible = edible;
     }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Product Details {product:%s, edible:%s, description:%s}",
-                product == null ? "<none>" : product.getName(),
-                edible.toString(),
-                description == null || description.isEmpty()
-                        ? ""
-                        : description.substring(0, Math.min(3, description.length()))
-        );
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductDetails that = (ProductDetails) o;
-        return Objects.equals(getDescription(), that.getDescription()) &&
-                Objects.equals(getEdible(), that.getEdible());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getDescription(), getEdible());
-    }
 }
