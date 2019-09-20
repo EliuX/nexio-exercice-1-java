@@ -13,11 +13,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -48,6 +50,18 @@ public class ProductServiceTest {
                 productsDtoList.size(),
                 equalTo(COUNT_OF_EXISTING_PRODUCTS)
         );
+    }
+
+    @Test
+    public void givenExistingProduct_whenFindByProductId_thenReturnProduct() {
+        final Product product = DataGenerator.generateProduct(true);
+
+        Mockito.when(productRepository.findById(anyLong()))
+                .thenReturn(Optional.of(product));
+
+        final Optional<Product> foundItem = productService.findProductById(1L);
+
+        assertTrue("The result should not be null", foundItem.isPresent());
     }
 
     @Test

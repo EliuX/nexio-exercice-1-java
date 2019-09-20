@@ -12,7 +12,7 @@ import java.util.Optional;
 public class ProductDetailsService {
 
     private final ProductDetailsRepository productDetailsRepository;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public ProductDetailsService(ProductDetailsRepository productDetailsRepository,
                                  ModelMapper modelMapper) {

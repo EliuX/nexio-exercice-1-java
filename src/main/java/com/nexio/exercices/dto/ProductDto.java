@@ -1,8 +1,6 @@
 package com.nexio.exercices.dto;
 
 
-import com.nexio.exercices.model.ProductDetails;
-
 import java.math.BigDecimal;
 
 public class ProductDto {

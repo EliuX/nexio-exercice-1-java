@@ -3,6 +3,7 @@ package com.nexio.exercices.utils;
 import com.github.javafaker.Faker;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.model.ProductDetails;
+import com.nexio.exercices.model.ShoppingCartItem;
 
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -37,5 +38,10 @@ public final class DataGenerator {
         );
 
         return new Product(productName, price);
+    }
+
+    public static ShoppingCartItem generateShoppingCartItem(Product product) {
+        Integer quantity = faker.number().numberBetween(1, 100);
+        return new ShoppingCartItem(product, quantity);
     }
 }

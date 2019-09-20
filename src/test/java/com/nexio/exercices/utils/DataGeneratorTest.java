@@ -1,6 +1,7 @@
 package com.nexio.exercices.utils;
 
 import com.nexio.exercices.model.Product;
+import com.nexio.exercices.model.ShoppingCartItem;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -99,6 +100,33 @@ public class DataGeneratorTest {
         Assert.assertFalse(
                 "The product name should not be a zone of memory",
                 product.getName().startsWith("com.github.javafaker")
+        );
+    }
+
+    @Test
+    public void generateShoppingCartItem_shouldGenerateValidElement() {
+        final Product product = DataGenerator.generateProduct(true);
+        final ShoppingCartItem shoppingCartItem =
+                DataGenerator.generateShoppingCartItem(product);
+
+        Assert.assertNotNull(
+                "The generated shopping cart item should not be null",
+                shoppingCartItem
+        );
+
+        Assert.assertFalse(
+                "The quantity should not be equals or lower to 1",
+                shoppingCartItem.getQuantity() <= 0
+        );
+
+        Assert.assertFalse(
+                "The quantity should not be bigger than 100",
+                shoppingCartItem.getQuantity() > 100
+        );
+
+        Assert.assertNotNull(
+                "The product should not be null",
+                shoppingCartItem.getProduct()
         );
     }
 }

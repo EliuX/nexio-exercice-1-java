@@ -4,12 +4,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 @Entity
 @Table(name = "product_details")
 public class ProductDetails {
 
+    /**
+     * Null Object Pattern
+     */
     public static final ProductDetails NULL_PRODUCT_DETAILS = new ProductDetails();
 
     @Id
