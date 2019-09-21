@@ -39,7 +39,7 @@ public class DataGenerator {
         }
 
         final BigDecimal price = BigDecimal.valueOf(
-                faker.number().randomDouble(2, 1, 999)
+                faker.number().randomDouble(2, 2, 999)
         );
 
         return new Product(productName, price);

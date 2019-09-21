@@ -32,7 +32,7 @@ public class AppConfig implements ApplicationRunner {
     @Autowired
     private ProductRepository productRepository;
 
-    @Value("${number-of-products:15}")
+    @Value("${data.number-of-products:15}")
     private Integer defaultNumberOfProducts;
 
     @Bean
@@ -54,9 +54,9 @@ public class AppConfig implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (args.containsOption("number-of-products")) {
+        if (args.containsOption("data.number-of-products")) {
             Integer numberOfProducts = Integer.parseInt(
-                    args.getOptionValues("number-of-products").get(0)
+                    args.getOptionValues("data.number-of-products").get(0)
             );
 
             generateSampleProducts(numberOfProducts);

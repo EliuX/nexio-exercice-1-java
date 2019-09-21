@@ -48,16 +48,16 @@ l’exécution du dossier `jar` le profile actif sera «dev». Avec le
 profile «dev» l’application fera la génération automatique des _15_ 
 produits pour remplir la base de données dans la mémoire. Cependant, si 
 vous voulez changer cette quantité spécifiez le paramètre 
-`number-of-products` 
+`data.number-of-products` 
 
 ...dans _resources/application.properties_:
 ```
-number-of-products=20
+data.number-of-products=20
 ```
 ou pendant le démarche de l'appli:
 
 ```bash
-java -jar target/nexio-exercice1-dev.jar --number-of-products=20
+java -jar target/nexio-exercice1-dev.jar --data.number-of-products=20
 ```
 
 En outre, si vous voulez vous pouvez changer le packaging à `war` pour 
@@ -73,9 +73,43 @@ Les scénarios disponibles sont les suivants:
 - Ajouter un produit au panier: PUT /shopping-cart/items
 - Afficher le contenu du panier: GET /shopping-cart/items
 - Enlever un produit du panier: DELETE /shopping-cart/items
+- Déconnexion à un compte utilisateur: GET /logout
 
 Il est recommandé utiliser la collection de Postman
 `Nexio - Exercice1.postman_collection.json`.
+
+### Securité
+Avec l’exception de la page d’accueil, les autres endpoints ont besoin 
+d’être connecté à un compte utilisateur. Les authentifiant disponibles 
+se trouve ci-après :
+		
+
+|Nom d’utilisateur   |Mots clés   |Role   |
+|--------------------|------------|-------|
+|user                |user        | USER  |
+|admin               |admin       | ADMIN |
+
+#### Login
+Pour faire l’authentiquassions en faisant  des appelles curl spécifiez 
+les paramètres username and password:
+
+```
+curl -i -X POST -d username=user -d password=user <<url securisé>>
+```
+
+Si vous voulez faire juste des appels GET en utilisant le surfeur web, 
+authentiquez-vous avec
+
+> http://localhost:8080/login
+
+Mais si comme la plupart des personnes vous allez utiliser un outil 
+comme Postman, pour toute sortes des appels, vous devez aller à
+
+1.	Authorization.
+2.	Choisir «Basic Auth » dans le champ « TYPE ».
+3.	Spécifiez les authentifiants d’un des utilisateurs disponibles. 
+4.	Désormais vous pouvez exécuter n’importe quelle requête HTTP
+
 
 ### Author
 **Eliecer Hernandez** - [eliecerhdz@gmail.com](mailto:eliecerhdz@gmail.com). 

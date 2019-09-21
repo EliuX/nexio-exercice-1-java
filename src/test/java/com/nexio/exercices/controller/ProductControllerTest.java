@@ -1,5 +1,6 @@
 package com.nexio.exercices.controller;
 
+import com.nexio.exercices.configuration.Roles;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.persistence.ProductRepository;
 import com.nexio.exercices.utils.DataGenerator;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -35,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithMockUser(roles = Roles.USER)
 public class ProductControllerTest {
 
     @Autowired

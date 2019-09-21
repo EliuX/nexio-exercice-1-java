@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct;
 import java.util.logging.Logger;
 
 @SpringBootApplication
-public class Exercice1Application{
+public class Exercice1Application {
 
     private static final Logger LOG
             = Logger.getLogger(Exercice1Application.class.getName());

@@ -24,7 +24,7 @@ public class ShoppingCartItemController {
     ) {
         final ShoppingCartItemDto appliedChangeDto = shoppingCartItemService.addOneItemOfProduct(
                 newItemRequestBody.getProductId()
-        ).orElseThrow(()-> new NotFoundException("Product not found"));
+        ).orElseThrow(() -> new NotFoundException("Product not found"));
 
         return new ResponseEntity<>(appliedChangeDto,
                 appliedChangeDto.isNew() ? HttpStatus.CREATED : HttpStatus.OK);
@@ -41,7 +41,7 @@ public class ShoppingCartItemController {
     ) {
         return shoppingCartItemService.removeOneItemOfProduct(
                 newItemRequestBody.getProductId()
-        ).orElseThrow(()-> new NotFoundException(
+        ).orElseThrow(() -> new NotFoundException(
                 "There is no item in the shopping cart for the specified product"
         ));
     }
