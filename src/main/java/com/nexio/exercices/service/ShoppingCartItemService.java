@@ -7,18 +7,20 @@ import com.nexio.exercices.persistence.ShoppingCartItemRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class ShoppingCartService {
+public class ShoppingCartItemService {
 
     private final ShoppingCartItemRepository shoppingCartItemRepository;
     private final ProductService productService;
     private final ModelMapper modelMapper;
 
-    public ShoppingCartService(ShoppingCartItemRepository shoppingCartItemRepository,
-                               ProductService productService,
-                               ModelMapper modelMapper) {
+    public ShoppingCartItemService(ShoppingCartItemRepository shoppingCartItemRepository,
+                                   ProductService productService,
+                                   ModelMapper modelMapper) {
         this.shoppingCartItemRepository = shoppingCartItemRepository;
         this.productService = productService;
         this.modelMapper = modelMapper;
@@ -28,6 +30,12 @@ public class ShoppingCartService {
         return productService.findProductById(productId)
                 .map(this::incrementShoppingCartQuantityForProduct)
                 .map(this::convertToShoppingCartDto);
+    }
+
+    public List<ShoppingCartItemDto> getAllItems() {
+        return shoppingCartItemRepository.findAll().stream()
+                .map(this::convertToShoppingCartDto)
+                .collect(Collectors.toList());
     }
 
     protected ShoppingCartItemDto convertToShoppingCartDto(ShoppingCartItem model) {
@@ -45,6 +53,8 @@ public class ShoppingCartService {
                 shoppingCartItemRepository.findByProductId(product.getId())
                         .orElseGet(() -> new ShoppingCartItem(product, 0));
 
-        return currentShoppingCart.incrementQuantityAndGet();
+        return shoppingCartItemRepository.save(
+                currentShoppingCart.incrementQuantityAndGet()
+        );
     }
 }

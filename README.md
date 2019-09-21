@@ -29,12 +29,6 @@ Vous serez évalué sur les points suivants:
 
 ## Solution
 
-### API REST
-Pour l'instant les scénarios disponibles sont les suivants:
-- Afficher un catalogue de produits: GET /products
-- Afficher le détail d’un produit: GET /products/{productId}/details
-- Ajouter un produit au panier: PUT /shopping-cart/add/{productId}
-
 ### Installation
 
 Cet project utilise [Maven][maven-website] comme outil de gestion et 
@@ -58,6 +52,15 @@ lesquels sera rempli la base de données.
 
 Si vous voulez vous pouvez changer le packaging à `war` pour livrer 
 l'applis dans un serveur comme le Tomcat.
+
+
+### API REST
+Les scénarios disponibles sont les suivants:
+- Afficher un catalogue de produits: GET /products
+- Afficher le détail d’un produit: GET /products/{productId}/details
+- Ajouter un produit au panier: PUT /shopping-cart/add/{productId}
+
+Pour faciliter 
 
 ### Author
 **Eliecer Hernandez** - [eliecerhdz@gmail.com](mailto:eliecerhdz@gmail.com). 

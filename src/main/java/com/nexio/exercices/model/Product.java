@@ -32,7 +32,6 @@ public class Product {
     public Product(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
-        this.productDetails = ProductDetails.NULL_PRODUCT_DETAILS;
     }
 
     public Long getId() {

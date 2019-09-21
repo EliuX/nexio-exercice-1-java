@@ -1,12 +1,14 @@
 package com.nexio.exercices.dto;
 
-import java.beans.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ShoppingCartItemDto {
 
     private Long id;
 
     private Long productId;
+
+    private String productName;
 
     private Integer quantity;
 
@@ -29,6 +31,14 @@ public class ShoppingCartItemDto {
         this.productId = productId;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
@@ -37,7 +47,8 @@ public class ShoppingCartItemDto {
         this.quantity = quantity;
     }
 
+    @JsonIgnore
     public boolean isNew() {
-        return getQuantity() == 1;
+        return getQuantity() == null || getQuantity() <= 1;
     }
 }

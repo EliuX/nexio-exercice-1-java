@@ -1,12 +1,10 @@
 package com.nexio.exercices.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public class NewShoppingCartItemDto {
+public class ShoppingCartItemChangeDto {
 
     private Long productId;
 
-    public NewShoppingCartItemDto() {
+    public ShoppingCartItemChangeDto() {
     }
 
     public Long getProductId() {

@@ -11,7 +11,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
@@ -48,54 +50,15 @@ public class ShoppingCartItemRepositoryTest {
     }
 
     @Test
-    public void shouldGetExistingShoppingCart() {
-        final Product product = DataGenerator.generateProduct(false);
-        final ShoppingCartItem shoppingCartItem =
-                DataGenerator.generateShoppingCartItem(product);
+    public void shouldFindShoppingCartItemByValidProductId() {
+        final ShoppingCartItem shoppingCartItem = createNewShoppingCartItem();
 
-        final ShoppingCartItem savedItem =
-                entityManager.persist(shoppingCartItem);
-
-        final Optional<ShoppingCartItem> foundItem =
-                shoppingCartItemRepository.findById(savedItem.getId());
-
-        assertTrue(
-                "A shopping cart item was found",
-                foundItem.isPresent()
+        final Long productId = (Long) entityManager.persistAndGetId(
+                shoppingCartItem.getProduct()
         );
-
-        assertThat(foundItem.get(), equalTo(savedItem));
-    }
-
-    @Test
-    public void shouldDeleteByIdExistingElement() {
-        final Product product = DataGenerator.generateProduct(false);
-        final ShoppingCartItem shoppingCartItem =
-                DataGenerator.generateShoppingCartItem(product);
-
-        final Long id = (Long) entityManager.persistAndGetId(shoppingCartItem);
-
-        shoppingCartItemRepository.deleteById(id);
-
-        final ShoppingCartItem foundElement =
-                entityManager.find(ShoppingCartItem.class, id);
-
-        assertNull(
-                "The deleted element should not be found",
-                foundElement
+        final Long shoppingCartItemId = (Long) entityManager.persistAndGetId(
+                shoppingCartItem
         );
-    }
-
-    @Test
-    public void shouldShoppingCartItemByValidProductId() {
-        final Product product = DataGenerator.generateProduct(false);
-        final ShoppingCartItem shoppingCartItem =
-                DataGenerator.generateShoppingCartItem(product);
-
-        final Long productId =
-                (Long) entityManager.persistAndGetId(product);
-        final Long shoppingCartItemId =
-                (Long) entityManager.persistAndGetId(shoppingCartItem);
 
         final Optional<ShoppingCartItem> foundItem =
                 shoppingCartItemRepository.findByProductId(productId);
@@ -104,6 +67,28 @@ public class ShoppingCartItemRepositoryTest {
         assertEquals(foundItem.get().getId(), shoppingCartItemId);
     }
 
+    @Test
+    public void shouldGetAllShoppingCartItems() {
+        final int COUNT_OF_EXISTING_ITEMS = 7;
+        Stream.generate(this::createNewShoppingCartItem)
+                .limit(COUNT_OF_EXISTING_ITEMS)
+                .forEach(item -> {
+                    entityManager.persist(item.getProduct());
+                    entityManager.persist(item);
+                });
+
+        final List<ShoppingCartItem> allItems =
+                shoppingCartItemRepository.findAll();
+
+        assertNotNull("The result should not be null", allItems);
+        assertFalse("The result should not be empty", allItems.isEmpty());
+        assertEquals(COUNT_OF_EXISTING_ITEMS, allItems.size());
+    }
+
+    private ShoppingCartItem createNewShoppingCartItem() {
+        final Product product = DataGenerator.generateProduct(false);
+        return DataGenerator.generateShoppingCartItem(product);
+    }
 
     @After
     public void clearData() {

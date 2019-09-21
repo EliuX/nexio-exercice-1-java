@@ -9,11 +9,6 @@ import javax.validation.constraints.Size;
 @Table(name = "product_details")
 public class ProductDetails {
 
-    /**
-     * Null Object Pattern
-     */
-    public static final ProductDetails NULL_PRODUCT_DETAILS = new ProductDetails();
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

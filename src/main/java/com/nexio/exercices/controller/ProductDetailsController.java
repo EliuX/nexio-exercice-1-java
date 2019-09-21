@@ -19,6 +19,6 @@ public class ProductDetailsController {
     @GetMapping
     public ProductDetailsDto getDetailsOfProduct(@PathVariable Long productId) {
         return productDetailsService.getProductDetails(productId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Product not found"));
     }
 }
