@@ -56,11 +56,15 @@ l'applis dans un serveur comme le Tomcat.
 
 ### API REST
 Les scénarios disponibles sont les suivants:
+
 - Afficher un catalogue de produits: GET /products
 - Afficher le détail d’un produit: GET /products/{productId}/details
-- Ajouter un produit au panier: PUT /shopping-cart/add/{productId}
+- Ajouter un produit au panier: PUT /shopping-cart/items
+- Afficher le contenu du panier: GET /shopping-cart/items
+- Enlever un produit du panier: DELETE /shopping-cart/items
 
-Pour faciliter 
+Il est recommandé utiliser la collection de Postman
+`Nexio - Exercice1.postman_collection.json`.
 
 ### Author
 **Eliecer Hernandez** - [eliecerhdz@gmail.com](mailto:eliecerhdz@gmail.com). 

@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "fb1b7666-e7bb-4c99-baaa-d3c1da7ad63f",
+		"name": "Nexio - Exercice1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				},
+				"description": "Afficher un catalogue de produits"
+			},
+			"response": []
+		},
+		{
+			"name": "GET products/details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/products/{{productId}}/details",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"{{productId}}",
+						"details"
+					]
+				},
+				"description": "Afficher le détail d’un produit"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT shopping-cart/item",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"productId\": {{productId}}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/shopping-cart/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shopping-cart",
+						"items"
+					]
+				},
+				"description": " Ajouter un produit au panier"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE shopping-cart/items",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": ""
+				},
+				"description": "Enlever un produit du panier"
+			},
+			"response": []
+		},
+		{
+			"name": "GET shopping-cart/items",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/shopping-cart/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shopping-cart",
+						"items"
+					]
+				},
+				"description": "Afficher le contenu du panier"
+			},
+			"response": []
+		}
+	]
+}
