@@ -13,21 +13,26 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.xml.crypto.Data;
 import java.util.Optional;
 
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class ProductDetailsRepositoryTest {
-    Product savedProduct;
+
     @Autowired
     private TestEntityManager entityManager;
+
     @Autowired
     private ProductDetailsRepository productDetailsRepository;
 
+    private Product savedProduct;
+
     @Before
     public void persistProduct() {
-        savedProduct = DataGenerator.generateProductWithDetails(true);
+        DataGenerator dataGenerator = new DataGenerator();
+        savedProduct = dataGenerator.generateProductWithDetails(true);
         entityManager.persist(savedProduct);
     }
 

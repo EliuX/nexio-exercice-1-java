@@ -37,6 +37,9 @@ public class ShoppingCartItemControllerTest {
 
     @Autowired
     private MockMvc mvc;
+    
+    @Autowired
+    private DataGenerator dataGenerator;
 
     @MockBean
     private ProductRepository productRepository;
@@ -57,11 +60,11 @@ public class ShoppingCartItemControllerTest {
                     return argument;
                 });
 
-        existingProduct = DataGenerator.generateProduct(true);
+        existingProduct = dataGenerator.generateProduct(true);
         existingProduct.setId(7L);
 
         existingShoppingCartItem =
-                DataGenerator.generateShoppingCartItem(existingProduct);
+                dataGenerator.generateShoppingCartItem(existingProduct);
         existingShoppingCartItem.setQuantity(1);
 
         when(productRepository.findById(7L)).thenReturn(Optional.of(existingProduct));
@@ -71,7 +74,7 @@ public class ShoppingCartItemControllerTest {
     @Test
     public void shouldCreateNewShoppingCartItemDtoWithAQuantityOfOneAndReturn201()
             throws Exception {
-        final Product existingProduct = DataGenerator.generateProduct(true);
+        final Product existingProduct = dataGenerator.generateProduct(true);
         existingProduct.setId(7L);
 
         when(productRepository.findById(7L))
@@ -92,10 +95,10 @@ public class ShoppingCartItemControllerTest {
     @Test
     public void shouldIncreaseQuantityForExistingShoppingCartItemAndReturn200()
             throws Exception {
-        final Product existingProduct = DataGenerator.generateProduct(true);
+        final Product existingProduct = dataGenerator.generateProduct(true);
         existingProduct.setId(1L);
         final ShoppingCartItem existingShoppingCartItem =
-                DataGenerator.generateShoppingCartItem(existingProduct);
+                dataGenerator.generateShoppingCartItem(existingProduct);
         existingShoppingCartItem.setQuantity(3);
 
         when(productRepository.findById(1L))
@@ -176,7 +179,7 @@ public class ShoppingCartItemControllerTest {
     }
 
     private ShoppingCartItem createNewShoppingCartItem() {
-        final Product product = DataGenerator.generateProduct(false);
-        return DataGenerator.generateShoppingCartItem(product);
+        final Product product = dataGenerator.generateProduct(false);
+        return dataGenerator.generateShoppingCartItem(product);
     }
 }

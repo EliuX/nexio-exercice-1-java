@@ -43,9 +43,12 @@ public class ProductControllerTest {
     @MockBean
     private ProductRepository productRepository;
 
+    @Autowired
+    private DataGenerator dataGenerator;
+
     @Test
     public void givenProducts_whenGetDetailsOfProduct_thenReturnJsonArray() throws Exception {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
 
         given(productRepository.findAll()).willReturn(Arrays.asList(product));
 
@@ -59,7 +62,7 @@ public class ProductControllerTest {
 
     @Test
     public void givenNoProducts_whenGetProductsCatalog_thenReturnEmptyJsonArray() throws Exception {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
 
         given(productRepository.findAll()).willReturn(Collections.emptyList());
 

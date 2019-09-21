@@ -43,15 +43,26 @@ mvn clean install
 
 2. Exécutez l'application
 
+Pour les essais automatiques le profile actif sera «test» et pendant 
+l’exécution du dossier `jar` le profile actif sera «dev». Avec le 
+profile «dev» l’application fera la génération automatique des _15_ 
+produits pour remplir la base de données dans la mémoire. Cependant, si 
+vous voulez changer cette quantité spécifiez le paramètre 
+`number-of-products` 
+
+...dans _resources/application.properties_:
+```
+number-of-products=20
+```
+ou pendant le démarche de l'appli:
+
 ```bash
-java -jar target/nexio-exercice1.jar --number-of-products=20
+java -jar target/nexio-exercice1-dev.jar --number-of-products=20
 ```
 
-Le paramètre `number-of-products` indiquera la quantité des produits avec
-lesquels sera rempli la base de données.
-
-Si vous voulez vous pouvez changer le packaging à `war` pour livrer 
-l'applis dans un serveur comme le Tomcat.
+En outre, si vous voulez vous pouvez changer le packaging à `war` pour 
+[livrer l'applis dans un serveur comme le Tomcat][demarche-tomcat]. Le
+plugin `maven-war-plugin` est déjà configuré pour cet objectif.
 
 
 ### API REST
@@ -73,3 +84,4 @@ Visitez ma [page LinkedIn][linkedin-page] pour en savoir plus sur moi.
 
 [maven-website]: https://maven.apache.org/
 [linkedin-page]: https://www.linkedin.com/in/eliecer-hern%C3%A1ndez-garbey-16172686/
+[demarche-tomcat]: https://tomcat.apache.org/tomcat-8.0-doc/deployer-howto.html#Deployment_on_Tomcat_startup

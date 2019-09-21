@@ -29,11 +29,13 @@ public class ShoppingCartItemRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
+    private DataGenerator dataGenerator = new DataGenerator();
+
     @Test
     public void shouldSaveShoppingCart() {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
         final ShoppingCartItem shoppingCartItem =
-                DataGenerator.generateShoppingCartItem(product);
+                dataGenerator.generateShoppingCartItem(product);
 
         final ShoppingCartItem savedShoppingCart =
                 shoppingCartItemRepository.save(shoppingCartItem);
@@ -86,8 +88,8 @@ public class ShoppingCartItemRepositoryTest {
     }
 
     private ShoppingCartItem createNewShoppingCartItem() {
-        final Product product = DataGenerator.generateProduct(false);
-        return DataGenerator.generateShoppingCartItem(product);
+        final Product product = dataGenerator.generateProduct(false);
+        return dataGenerator.generateShoppingCartItem(product);
     }
 
     @After

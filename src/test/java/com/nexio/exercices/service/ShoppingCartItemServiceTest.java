@@ -33,6 +33,9 @@ public class ShoppingCartItemServiceTest {
 
     @MockBean
     private ShoppingCartItemRepository shoppingCartItemRepository;
+    
+    @Autowired
+    private DataGenerator dataGenerator;
 
     @Before
     public void mockShoppingCartItemRepositorySave() {
@@ -46,7 +49,7 @@ public class ShoppingCartItemServiceTest {
 
     @Test
     public void shouldCreateNewShoppingCartItem() {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
         product.setId(7L);
 
         when(productService.findProductById(anyLong()))
@@ -65,9 +68,9 @@ public class ShoppingCartItemServiceTest {
 
     @Test
     public void shouldIncrementQuantifyOfExistingShoppingCartItem() {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
         product.setId(7L);
-        final ShoppingCartItem model = DataGenerator.generateShoppingCartItem(product);
+        final ShoppingCartItem model = dataGenerator.generateShoppingCartItem(product);
         model.setId(9L);
         Integer currentQuantity = model.getQuantity();
 
@@ -102,9 +105,9 @@ public class ShoppingCartItemServiceTest {
 
     @Test
     public void shouldConvertModelToShoppingCartDto() {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
         product.setId(7L);
-        final ShoppingCartItem model = DataGenerator.generateShoppingCartItem(product);
+        final ShoppingCartItem model = dataGenerator.generateShoppingCartItem(product);
         model.setId(9L);
 
         final ShoppingCartItemDto dto =
@@ -136,10 +139,10 @@ public class ShoppingCartItemServiceTest {
 
     @Test
     public void givenOnlyOneItemIsLeft_whenRemoveOneItemOfProduct_thenRemovesShoppingCartItem() {
-        final Product existingProduct = DataGenerator.generateProduct(true);
+        final Product existingProduct = dataGenerator.generateProduct(true);
         existingProduct.setId(7L);
         final ShoppingCartItem existingShoppingCartItem =
-                DataGenerator.generateShoppingCartItem(existingProduct);
+                dataGenerator.generateShoppingCartItem(existingProduct);
         existingShoppingCartItem.setQuantity(1);
 
         when(productService.findProductById(7L)).thenReturn(Optional.of(existingProduct));

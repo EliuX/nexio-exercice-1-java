@@ -33,6 +33,9 @@ public class ProductDetailsServiceTest {
 
     @MockBean
     ProductDetailsRepository productDetailsRepository;
+    
+    @Autowired
+    private DataGenerator dataGenerator;
 
     @Test
     public void shouldNotReturnProductDetails() {
@@ -50,7 +53,7 @@ public class ProductDetailsServiceTest {
 
     @Test
     public void shouldReturnExistingProductDetails() {
-        final Product product = DataGenerator.generateProductWithDetails(false);
+        final Product product = dataGenerator.generateProductWithDetails(false);
         Mockito.when(productDetailsRepository.findByProductId(anyLong()))
                 .thenReturn(Optional.of(product.getProductDetails()));
 
@@ -65,7 +68,7 @@ public class ProductDetailsServiceTest {
 
     @Test
     public void shouldConvertProductDetailsModelToDto() {
-        final Product product = DataGenerator.generateProductWithDetails(true);
+        final Product product = dataGenerator.generateProductWithDetails(true);
 
         final ProductDetailsDto productDetailsDto =
                 productDetailsService.convertToProductDetailsDto(product.getProductDetails());

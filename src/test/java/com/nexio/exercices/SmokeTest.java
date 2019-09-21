@@ -1,5 +1,8 @@
-package com.nexio.exercices.controller;
+package com.nexio.exercices;
 
+import com.nexio.exercices.controller.ProductController;
+import com.nexio.exercices.controller.ProductDetailsController;
+import com.nexio.exercices.controller.ShoppingCartItemController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +17,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SmokeTest {
 
     @Autowired
-    ProductController productController;
+    private ProductController productController;
 
     @Autowired
-    ProductDetailsController productDetailsController;
+    private ProductDetailsController productDetailsController;
+
+    @Autowired
+    private ShoppingCartItemController shoppingCartItemController;
 
     @Test
     public void shouldLoadContext() {
         assertThat(productController).isNotNull();
         assertThat(productDetailsController).isNotNull();
+        assertThat(shoppingCartItemController).isNotNull();
     }
-
 }

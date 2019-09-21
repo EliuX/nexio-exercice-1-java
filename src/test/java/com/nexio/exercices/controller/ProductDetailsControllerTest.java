@@ -36,9 +36,12 @@ public class ProductDetailsControllerTest {
     @MockBean
     private ProductDetailsRepository productDetailsRepository;
 
+    @Autowired
+    private DataGenerator dataGenerator;
+
     @Test
     public void givenProductDetails_whenGetDetailsOfProduct_thenReturnJson() throws Exception {
-        final Product existingProduct = DataGenerator.generateProductWithDetails(true);
+        final Product existingProduct = dataGenerator.generateProductWithDetails(true);
         when(productDetailsRepository.findByProductId(anyLong()))
                 .thenReturn(Optional.of(existingProduct.getProductDetails()));
 

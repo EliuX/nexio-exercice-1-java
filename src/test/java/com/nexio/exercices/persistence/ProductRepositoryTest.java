@@ -24,15 +24,18 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    private DataGenerator dataGenerator;
+
     @Before
     public void clearData() {
         entityManager.clear();
+        dataGenerator = new DataGenerator();
     }
 
     @Test
     public void shouldReturnExistingProducts() {
         final int COUNT_OF_EXISTING_PRODUCTS = 3;
-        Stream.generate(() -> DataGenerator.generateProductWithDetails(false))
+        Stream.generate(() -> dataGenerator.generateProductWithDetails(false))
                 .limit(COUNT_OF_EXISTING_PRODUCTS)
                 .forEach(entityManager::persist);
 

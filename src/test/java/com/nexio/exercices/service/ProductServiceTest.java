@@ -26,16 +26,19 @@ import static org.mockito.ArgumentMatchers.anyLong;
 public class ProductServiceTest {
 
     @Autowired
-    ProductService productService;
+    private ProductService productService;
 
     @MockBean
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
+
+    @Autowired
+    private DataGenerator dataGenerator;
 
     @Test
     public void shouldReturnListOfProducts() {
         final int COUNT_OF_EXISTING_PRODUCTS = 5;
         final List<Product> products = Stream.generate(
-                () -> DataGenerator.generateProductWithDetails(false)
+                () -> dataGenerator.generateProductWithDetails(false)
         )
                 .limit(COUNT_OF_EXISTING_PRODUCTS)
                 .collect(Collectors.toList());
@@ -54,7 +57,7 @@ public class ProductServiceTest {
 
     @Test
     public void givenExistingProduct_whenFindByProductId_thenReturnProduct() {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
 
         Mockito.when(productRepository.findById(anyLong()))
                 .thenReturn(Optional.of(product));
@@ -66,7 +69,7 @@ public class ProductServiceTest {
 
     @Test
     public void shouldConvertProductModelToDto() {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
 
         final ProductDto productDto = productService.convertToProductDto(product);
 

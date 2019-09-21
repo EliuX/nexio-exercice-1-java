@@ -8,14 +8,19 @@ import com.nexio.exercices.model.ShoppingCartItem;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-public final class DataGenerator {
+public class DataGenerator {
 
-    private static final Faker faker = Faker.instance(Locale.CANADA_FRENCH);
+    private final Faker faker;
 
-    private DataGenerator() {
+    public DataGenerator() {
+        faker = Faker.instance();
     }
 
-    public static Product generateProductWithDetails(boolean isEdible) {
+    public DataGenerator(Locale locale) {
+        this.faker = Faker.instance(locale);
+    }
+
+    public Product generateProductWithDetails(boolean isEdible) {
         final Product product = generateProduct(isEdible);
         product.setProductDetails(new ProductDetails(
                 faker.lorem().sentence(5, 40),
@@ -25,7 +30,7 @@ public final class DataGenerator {
         return product;
     }
 
-    public static Product generateProduct(boolean isEdible) {
+    public Product generateProduct(boolean isEdible) {
         final String productName;
         if (isEdible) {
             productName = faker.food().ingredient();
@@ -40,7 +45,7 @@ public final class DataGenerator {
         return new Product(productName, price);
     }
 
-    public static ShoppingCartItem generateShoppingCartItem(Product product) {
+    public ShoppingCartItem generateShoppingCartItem(Product product) {
         Integer quantity = faker.number().numberBetween(1, 100);
         return new ShoppingCartItem(product, quantity);
     }

@@ -1,17 +1,27 @@
 package com.nexio.exercices.utils;
 
+import com.nexio.exercices.configuration.AppConfig;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.model.ShoppingCartItem;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class DataGeneratorTest {
+
+    @Autowired
+    private DataGenerator dataGenerator;
 
     @Test
     public void generateProduct_shouldGenerateValidProduct() {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
 
         final int productNameLength = product.getName().length();
         Assert.assertTrue(
@@ -37,7 +47,7 @@ public class DataGeneratorTest {
 
     @Test
     public void generateProductWithDetails_shouldGenerateValidProductDetails() {
-        final Product product = DataGenerator.generateProductWithDetails(true);
+        final Product product = dataGenerator.generateProductWithDetails(true);
 
         Assert.assertNotNull(
                 "The product should not be null",
@@ -75,7 +85,7 @@ public class DataGeneratorTest {
 
     @Test
     public void generateProductWithDetails_shouldGenerateAnEdibleProduct() {
-        final Product product = DataGenerator.generateProductWithDetails(true);
+        final Product product = dataGenerator.generateProductWithDetails(true);
 
         Assert.assertTrue(
                 "The product should be edible",
@@ -90,7 +100,7 @@ public class DataGeneratorTest {
 
     @Test
     public void generateProductWithDetails_shouldGenerateANonEdibleProduct() {
-        final Product product = DataGenerator.generateProductWithDetails(false);
+        final Product product = dataGenerator.generateProductWithDetails(false);
 
         Assert.assertFalse(
                 "The product should not be edible",
@@ -105,9 +115,9 @@ public class DataGeneratorTest {
 
     @Test
     public void generateShoppingCartItem_shouldGenerateValidElement() {
-        final Product product = DataGenerator.generateProduct(true);
+        final Product product = dataGenerator.generateProduct(true);
         final ShoppingCartItem shoppingCartItem =
-                DataGenerator.generateShoppingCartItem(product);
+                dataGenerator.generateShoppingCartItem(product);
 
         Assert.assertNotNull(
                 "The generated shopping cart item should not be null",
