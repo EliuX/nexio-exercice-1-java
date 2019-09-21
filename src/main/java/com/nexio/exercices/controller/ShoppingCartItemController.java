@@ -34,4 +34,15 @@ public class ShoppingCartItemController {
     public List<ShoppingCartItemDto> getItems() {
         return shoppingCartItemService.getAllItems();
     }
+
+    @DeleteMapping
+    public ShoppingCartItemDto removeItemOfProduct(
+            @RequestBody ShoppingCartItemChangeDto newItemRequestBody
+    ) {
+        return shoppingCartItemService.removeOneItemOfProduct(
+                newItemRequestBody.getProductId()
+        ).orElseThrow(()-> new NotFoundException(
+                "There is no item in the shopping cart for the specified product"
+        ));
+    }
 }

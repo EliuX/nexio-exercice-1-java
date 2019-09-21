@@ -12,17 +12,14 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -135,5 +132,26 @@ public class ShoppingCartItemServiceTest {
         assertEquals(dto.getQuantity(), model.getQuantity());
         assertEquals(dto.getProductId(), model.getProduct().getId());
         assertEquals(dto.getProductName(), model.getProduct().getName());
+    }
+
+    @Test
+    public void givenOnlyOneItemIsLeft_whenRemoveOneItemOfProduct_thenRemovesShoppingCartItem() {
+        final Product existingProduct = DataGenerator.generateProduct(true);
+        existingProduct.setId(7L);
+        final ShoppingCartItem existingShoppingCartItem =
+                DataGenerator.generateShoppingCartItem(existingProduct);
+        existingShoppingCartItem.setQuantity(1);
+
+        when(productService.findProductById(7L)).thenReturn(Optional.of(existingProduct));
+        when(shoppingCartItemRepository.findByProductId(7L)).thenReturn(Optional.of(existingShoppingCartItem));
+
+        final Optional<ShoppingCartItemDto> newShoppingCartItemDto =
+                shoppingCartItemService.removeOneItemOfProduct(existingProduct.getId());
+
+        verify(shoppingCartItemRepository, times(1)).delete(existingShoppingCartItem);
+
+        assertNotNull(newShoppingCartItemDto);
+        assertTrue(newShoppingCartItemDto.isPresent());
+        assertThat(newShoppingCartItemDto.get().getQuantity(), equalTo(0));
     }
 }

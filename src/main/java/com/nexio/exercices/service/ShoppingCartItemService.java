@@ -32,6 +32,13 @@ public class ShoppingCartItemService {
                 .map(this::convertToShoppingCartDto);
     }
 
+    public Optional<ShoppingCartItemDto> removeOneItemOfProduct(Long productId) {
+        return productService.findProductById(productId)
+                .map(Product::getId)
+                .flatMap(this::decreaseShoppingCartQuantityForProduct)
+                .map(this::convertToShoppingCartDto);
+    }
+
     public List<ShoppingCartItemDto> getAllItems() {
         return shoppingCartItemRepository.findAll().stream()
                 .map(this::convertToShoppingCartDto)
@@ -53,8 +60,25 @@ public class ShoppingCartItemService {
                 shoppingCartItemRepository.findByProductId(product.getId())
                         .orElseGet(() -> new ShoppingCartItem(product, 0));
 
-        return shoppingCartItemRepository.save(
+        return saveUpdatedShoppingCartItem(
                 currentShoppingCart.incrementQuantityAndGet()
         );
+    }
+
+    private Optional<ShoppingCartItem> decreaseShoppingCartQuantityForProduct(
+            Long productId
+    ) {
+        return shoppingCartItemRepository.findByProductId(productId)
+                .map(ShoppingCartItem::decreaseQuantityAndGet)
+                .map(this::saveUpdatedShoppingCartItem);
+    }
+
+    private ShoppingCartItem saveUpdatedShoppingCartItem(ShoppingCartItem item) {
+        if (item.isEmpty()) {
+            shoppingCartItemRepository.delete(item);
+            return item;
+        } else {
+            return shoppingCartItemRepository.save(item);
+        }
     }
 }

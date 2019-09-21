@@ -66,6 +66,16 @@ public class ShoppingCartItem {
         return this;
     }
 
+    public ShoppingCartItem decreaseQuantityAndGet() {
+        setQuantity(Math.max(0, getQuantity() - 1));
+        return this;
+    }
+
+    @Transient
+    public boolean isEmpty() {
+        return getQuantity() < 1;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
