@@ -33,7 +33,7 @@ public class ShoppingCartServiceTest {
     private ShoppingCartItemRepository shoppingCartItemRepository;
 
     @Test
-    public void givenProductWithNoExistentShoppingCart_whenAddProduct_thenReturnNewShoppingCartDto() {
+    public void shouldCreateNewShoppingCartItem() {
         final Product product = DataGenerator.generateProduct(true);
         product.setId(7L);
 
@@ -43,7 +43,7 @@ public class ShoppingCartServiceTest {
                 .thenReturn(Optional.empty());
 
         final Optional<ShoppingCartItemDto> shoppingCartItemDto
-                = shoppingCartService.addProduct(7L);
+                = shoppingCartService.addOneItemOfProduct(7L);
 
         assertNotNull("The result should not be null", shoppingCartItemDto);
         assertTrue("The result should not be empty", shoppingCartItemDto.isPresent());
@@ -52,7 +52,7 @@ public class ShoppingCartServiceTest {
     }
 
     @Test
-    public void givenProductWithExistentShoppingCart_whenAddProduct_thenReturnNewShoppingCartDtoWithIncreasedQuantity() {
+    public void shouldIncrementQuantifyOfExistingShoppingCartItem() {
         final Product product = DataGenerator.generateProduct(true);
         product.setId(7L);
         final ShoppingCartItem model = DataGenerator.generateShoppingCartItem(product);
@@ -65,7 +65,7 @@ public class ShoppingCartServiceTest {
                 .thenReturn(Optional.of(model));
 
         final Optional<ShoppingCartItemDto> shoppingCartItemDto
-                = shoppingCartService.addProduct(7L);
+                = shoppingCartService.addOneItemOfProduct(7L);
 
         assertNotNull("The result should not be null", shoppingCartItemDto);
         assertTrue("The result should not be empty", shoppingCartItemDto.isPresent());
@@ -77,12 +77,12 @@ public class ShoppingCartServiceTest {
     }
 
     @Test
-    public void givenNoExistingProduct_whenAddProduct_thenReturnOptionalEmpty() {
+    public void shouldNotAddShoppingCartItemWhenInvalidProductIdIsSpecified() {
         when(productService.findProductById(anyLong()))
                 .thenReturn(Optional.empty());
 
         final Optional<ShoppingCartItemDto> shoppingCartItemDto
-                = shoppingCartService.addProduct(7L);
+                = shoppingCartService.addOneItemOfProduct(7L);
 
         assertNotNull("The result should not be null", shoppingCartItemDto);
         assertFalse("The result should be empty", shoppingCartItemDto.isPresent());

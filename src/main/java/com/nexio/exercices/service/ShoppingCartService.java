@@ -24,7 +24,7 @@ public class ShoppingCartService {
         this.modelMapper = modelMapper;
     }
 
-    public Optional<ShoppingCartItemDto> addProduct(Long productId) {
+    public Optional<ShoppingCartItemDto> addOneItemOfProduct(Long productId) {
         return productService.findProductById(productId)
                 .map(this::incrementShoppingCartQuantityForProduct)
                 .map(this::convertToShoppingCartDto);

@@ -1,5 +1,7 @@
 package com.nexio.exercices.dto;
 
+import java.beans.Transient;
+
 public class ShoppingCartItemDto {
 
     private Long id;
@@ -33,5 +35,9 @@ public class ShoppingCartItemDto {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public boolean isNew() {
+        return getQuantity() == 1;
     }
 }
