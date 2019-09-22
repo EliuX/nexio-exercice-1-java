@@ -21,7 +21,7 @@ public class Exercice1Application {
     public static void main(String[] args) {
         LOG.info("L'appli pour l'exercice 1 a démarré!");
         SpringApplication.run(Exercice1Application.class, args);
-        LOG.info("L'appli pour l'exercice 1 s'est actif!");
+        LOG.info("L'appli pour l'exercice 1 est actif!");
     }
 
     @PostConstruct

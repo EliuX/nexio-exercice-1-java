@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@WithMockUser(username = "user")
 public class ShoppingCartItemRepositoryTest {
 
     @Autowired
@@ -32,10 +34,10 @@ public class ShoppingCartItemRepositoryTest {
     private DataGenerator dataGenerator = new DataGenerator();
 
     @Test
-    public void shouldSaveShoppingCart() {
+    public void shouldSaveShoppingCartOfAUser() {
         final Product product = dataGenerator.generateProduct(true);
         final ShoppingCartItem shoppingCartItem =
-                dataGenerator.generateShoppingCartItem(product);
+                dataGenerator.generateShoppingCartItem(product, "user");
 
         final ShoppingCartItem savedShoppingCart =
                 shoppingCartItemRepository.save(shoppingCartItem);
@@ -52,25 +54,43 @@ public class ShoppingCartItemRepositoryTest {
     }
 
     @Test
-    public void shouldFindShoppingCartItemByValidProductId() {
+    public void shouldFindShoppingCartItemByValidProductIdAndUsername() {
         final ShoppingCartItem shoppingCartItem = createNewShoppingCartItem();
 
         final Long productId = (Long) entityManager.persistAndGetId(
                 shoppingCartItem.getProduct()
         );
-        final Long shoppingCartItemId = (Long) entityManager.persistAndGetId(
-                shoppingCartItem
-        );
+        final ShoppingCartItem savedItem = shoppingCartItemRepository.save(shoppingCartItem);
 
         final Optional<ShoppingCartItem> foundItem =
-                shoppingCartItemRepository.findByProductId(productId);
+                shoppingCartItemRepository.findByProductIdAndUsername(productId, "user");
 
-        assertTrue("Was able to find an item", foundItem.isPresent());
-        assertEquals(foundItem.get().getId(), shoppingCartItemId);
+        assertTrue("The saved item should be found", foundItem.isPresent());
+        assertEquals(foundItem.get().getId(), savedItem.getId());
+        assertEquals(foundItem.get().getProduct().getId(), productId);
+        assertEquals(foundItem.get().getUsername(), "user");
     }
 
     @Test
-    public void shouldGetAllShoppingCartItems() {
+    public void shouldNotFindShoppingCartItemByInvalidUsername() {
+        final ShoppingCartItem item = createNewShoppingCartItem();
+
+        final Long productId = (Long) entityManager.persistAndGetId(
+                item.getProduct()
+        );
+        shoppingCartItemRepository.save(item);
+
+        final Optional<ShoppingCartItem> foundItem =
+                shoppingCartItemRepository.findByProductIdAndUsername(productId, "invaliduser");
+
+        assertFalse(
+                "The previously saved item should not be found",
+                foundItem.isPresent()
+        );
+    }
+
+    @Test
+    public void shouldGetAllShoppingCartItemsOfAUser() {
         final int COUNT_OF_EXISTING_ITEMS = 7;
         Stream.generate(this::createNewShoppingCartItem)
                 .limit(COUNT_OF_EXISTING_ITEMS)
@@ -80,7 +100,7 @@ public class ShoppingCartItemRepositoryTest {
                 });
 
         final List<ShoppingCartItem> allItems =
-                shoppingCartItemRepository.findAll();
+                shoppingCartItemRepository.findAllByUsername("user");
 
         assertNotNull("The result should not be null", allItems);
         assertFalse("The result should not be empty", allItems.isEmpty());
@@ -89,7 +109,7 @@ public class ShoppingCartItemRepositoryTest {
 
     private ShoppingCartItem createNewShoppingCartItem() {
         final Product product = dataGenerator.generateProduct(false);
-        return dataGenerator.generateShoppingCartItem(product);
+        return dataGenerator.generateShoppingCartItem(product, "user");
     }
 
     @After

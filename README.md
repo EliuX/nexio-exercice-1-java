@@ -70,8 +70,9 @@ Les scénarios disponibles sont les suivants:
 
 - Afficher un catalogue de produits: GET /products
 - Afficher le détail d’un produit: GET /products/{productId}/details
+- Afficher le contenu du panier: GET /shopping-cart
+- Afficher les articles du panier: GET /shopping-cart/items
 - Ajouter un produit au panier: PUT /shopping-cart/items
-- Afficher le contenu du panier: GET /shopping-cart/items
 - Enlever un produit du panier: DELETE /shopping-cart/items
 - Déconnexion à un compte utilisateur: GET /logout
 
@@ -84,26 +85,32 @@ d’être connecté à un compte utilisateur. Les authentifiant disponibles
 se trouve ci-après :
 		
 
-|Nom d’utilisateur   |Mots clés   |Role   |
+|Nom d’utilisateur   |Mot de passe|Role   |
 |--------------------|------------|-------|
-|user                |user        | USER  |
-|admin               |admin       | ADMIN |
+|user@nexio.com      |user        | USER  |
+|user2@nexio.com     |user2       | USER  |
+|admin@nexio.com     |admin       | ADMIN |
 
-#### Login
-Pour faire l’authentiquassions en faisant  des appelles curl spécifiez 
-les paramètres username and password:
+#### Connexion à un compte utilisateur
+
+Dans ce projet on peut faire la connexion à un compte utilisateur des
+différents façons:
+
+1. Avec des appelles curl spécifiez les paramètres `username` and 
+`password`:
 
 ```
 curl -i -X POST -d username=user -d password=user <<url securisé>>
 ```
 
-Si vous voulez faire juste des appels GET en utilisant le surfeur web, 
-authentiquez-vous avec
+1. Si vous voulez faire juste des appels `GET` en utilisant un surfeur 
+web, authentiquez-vous dans l'address ci-après:
 
 > http://localhost:8080/login
 
-Mais si comme la plupart des personnes vous allez utiliser un outil 
-comme Postman, pour toute sortes des appels, vous devez aller à
+Mais si comme la plupart des personnes vous voulez utiliser un outil 
+comme Postman, pour faire toutes sortes des appels, vous devez suivre 
+les prochains pas :
 
 1.	Authorization.
 2.	Choisir «Basic Auth » dans le champ « TYPE ».

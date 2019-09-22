@@ -1,6 +1,7 @@
 package com.nexio.exercices.utils;
 
 import com.nexio.exercices.configuration.AppConfig;
+import com.nexio.exercices.dto.ProductDto;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.model.ShoppingCartItem;
 import org.junit.Assert;
@@ -11,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,13 +37,13 @@ public class DataGeneratorTest {
                 productNameLength <= 100
         );
 
-        Assert.assertEquals(
+        assertEquals(
                 "The price should have 2 decimal values",
                 2,
                 product.getPrice().scale()
         );
 
-        Assert.assertEquals("The price should have no more than 4 digits",
+        assertEquals("The price should have no more than 4 digits",
                 -1,
                 product.getPrice().compareTo(BigDecimal.valueOf(999))
         );
@@ -76,7 +80,7 @@ public class DataGeneratorTest {
                 product.getProductDetails().getEdible()
         );
 
-        Assert.assertEquals(
+        assertEquals(
                 "The productDetails should have a reference to the product",
                 product,
                 product.getProductDetails().getProduct()
@@ -117,7 +121,7 @@ public class DataGeneratorTest {
     public void generateShoppingCartItem_shouldGenerateValidElement() {
         final Product product = dataGenerator.generateProduct(true);
         final ShoppingCartItem shoppingCartItem =
-                dataGenerator.generateShoppingCartItem(product);
+                dataGenerator.generateShoppingCartItem(product, "user");
 
         Assert.assertNotNull(
                 "The generated shopping cart item should not be null",
@@ -138,5 +142,24 @@ public class DataGeneratorTest {
                 "The product should not be null",
                 shoppingCartItem.getProduct()
         );
+
+        Assert.assertNotNull(
+                "The username of the item should be user",
+                shoppingCartItem.getUsername()
+        );
+    }
+
+    @Test
+    public void shouldGenerateProductDtoBasedOnAttributesOfTheProduct() {
+        final ProductDto productDto = dataGenerator.generateProductDto(true);
+
+        assertNotNull(productDto.getId());
+        assertNotNull(productDto.getId() > 0);
+
+        assertNotNull(productDto.getName());
+        assertNotNull(productDto.getName().isEmpty());
+
+        assertNotNull(productDto.getPrice());
+        assertEquals(1, productDto.getPrice().compareTo(BigDecimal.ZERO));
     }
 }

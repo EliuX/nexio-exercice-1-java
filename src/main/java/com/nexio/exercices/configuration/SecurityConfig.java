@@ -36,11 +36,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth)
             throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user")
+                .withUser("user@nexio.com")
                 .password(encoder().encode("user"))
                 .roles(Roles.USER)
                 .and()
-                .withUser("admin")
+                .withUser("user2@nexio.com")
+                .password(encoder().encode("user2"))
+                .roles(Roles.USER)
+                .and()
+                .withUser("admin@nexio.com")
                 .password(encoder().encode("admin"))
                 .roles(Roles.ADMIN);
     }

@@ -1,5 +1,6 @@
 package com.nexio.exercices.controller;
 
+import com.nexio.exercices.dto.ShoppingCartDto;
 import com.nexio.exercices.dto.ShoppingCartItemChangeDto;
 import com.nexio.exercices.dto.ShoppingCartItemDto;
 import com.nexio.exercices.exception.NotFoundException;
@@ -9,40 +10,46 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/shopping-cart/items")
-public class ShoppingCartItemController {
+@RequestMapping("/shopping-cart")
+public class ShoppingCartController {
 
     @Autowired
     private ShoppingCartItemService shoppingCartItemService;
 
-    @PutMapping
+    @GetMapping
+    public ShoppingCartDto getContent() {
+        return shoppingCartItemService.getContent();
+    }
+
+    @PutMapping("/items")
     public ResponseEntity<ShoppingCartItemDto> addNewItemOfProduct(
-            @RequestBody ShoppingCartItemChangeDto newItemRequestBody
+            @Valid @RequestBody ShoppingCartItemChangeDto newItemRequestBody
     ) {
         final ShoppingCartItemDto appliedChangeDto = shoppingCartItemService.addOneItemOfProduct(
                 newItemRequestBody.getProductId()
-        ).orElseThrow(() -> new NotFoundException("Product not found"));
+        ).orElseThrow(() -> new NotFoundException("Produit introuvable"));
 
         return new ResponseEntity<>(appliedChangeDto,
                 appliedChangeDto.isNew() ? HttpStatus.CREATED : HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/items")
     public List<ShoppingCartItemDto> getItems() {
         return shoppingCartItemService.getAllItems();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/items")
     public ShoppingCartItemDto removeItemOfProduct(
-            @RequestBody ShoppingCartItemChangeDto newItemRequestBody
+            @Valid @RequestBody ShoppingCartItemChangeDto newItemRequestBody
     ) {
         return shoppingCartItemService.removeOneItemOfProduct(
                 newItemRequestBody.getProductId()
         ).orElseThrow(() -> new NotFoundException(
-                "There is no item in the shopping cart for the specified product"
+                "Le produit specifié n’est pas dans le panier"
         ));
     }
 }

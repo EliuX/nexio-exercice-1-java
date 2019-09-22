@@ -2,12 +2,11 @@ package com.nexio.exercices;
 
 import com.nexio.exercices.controller.ProductController;
 import com.nexio.exercices.controller.ProductDetailsController;
-import com.nexio.exercices.controller.ShoppingCartItemController;
+import com.nexio.exercices.controller.ShoppingCartController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,12 +22,12 @@ public class SmokeTest {
     private ProductDetailsController productDetailsController;
 
     @Autowired
-    private ShoppingCartItemController shoppingCartItemController;
+    private ShoppingCartController shoppingCartController;
 
     @Test
     public void shouldLoadContext() {
         assertThat(productController).isNotNull();
         assertThat(productDetailsController).isNotNull();
-        assertThat(shoppingCartItemController).isNotNull();
+        assertThat(shoppingCartController).isNotNull();
     }
 }

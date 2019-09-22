@@ -2,13 +2,14 @@ package com.nexio.exercices.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
 public class ShoppingCartItemDto {
 
     private Long id;
 
-    private Long productId;
-
-    private String productName;
+    private ProductDto product;
 
     private Integer quantity;
 
@@ -23,20 +24,12 @@ public class ShoppingCartItemDto {
         this.id = id;
     }
 
-    public Long getProductId() {
-        return productId;
+    public ProductDto getProduct() {
+        return product;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProduct(ProductDto product) {
+        this.product = product;
     }
 
     public Integer getQuantity() {
@@ -50,5 +43,16 @@ public class ShoppingCartItemDto {
     @JsonIgnore
     public boolean isNew() {
         return getQuantity() == null || getQuantity() <= 1;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return BigDecimal.valueOf(
+                Optional.ofNullable(getQuantity())
+                        .orElse(0)
+        ).multiply(
+                Optional.ofNullable(product)
+                        .map(ProductDto::getPrice)
+                        .orElse(BigDecimal.ZERO)
+        );
     }
 }

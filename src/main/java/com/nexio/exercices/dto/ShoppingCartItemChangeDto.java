@@ -1,7 +1,10 @@
 package com.nexio.exercices.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class ShoppingCartItemChangeDto {
 
+    @NotNull
     private Long productId;
 
     public ShoppingCartItemChangeDto() {

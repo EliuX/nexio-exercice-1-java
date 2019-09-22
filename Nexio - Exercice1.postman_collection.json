@@ -6,6 +6,33 @@
 	},
 	"item": [
 		{
+			"name": "Page d'accueil.",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						""
+					]
+				},
+				"description": "Page d'accueil, pas besoin de conexion à un compte utilisateur"
+			},
+			"response": []
+		},
+		{
 			"name": "GET products",
 			"request": {
 				"method": "GET",
@@ -56,6 +83,126 @@
 			"response": []
 		},
 		{
+			"name": "GET /shopping-cart",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/shopping-cart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shopping-cart"
+					]
+				},
+				"description": "Afficher le contenu du panier"
+			},
+			"response": []
+		},
+		{
+			"name": "GET shopping-cart/items",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/shopping-cart/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shopping-cart",
+						"items"
+					]
+				},
+				"description": "Afficher les articles du panier"
+			},
+			"response": [
+				{
+					"name": "GET shopping-cart/items",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/shopping-cart/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shopping-cart",
+								"items"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "WWW-Authenticate",
+							"value": "Basic realm=\"NexioExercice1\""
+						},
+						{
+							"key": "WWW-Authenticate",
+							"value": "Basic realm=\"NexioExercice1\""
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 22 Sep 2019 04:53:32 GMT"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
 			"name": "PUT shopping-cart/item",
 			"request": {
 				"method": "PUT",
@@ -69,7 +216,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"productId\": 1\n}"
+					"raw": "{\n\t\"productId\": 3\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/shopping-cart/items",
@@ -120,7 +267,7 @@
 			"response": []
 		},
 		{
-			"name": "GET shopping-cart/items",
+			"name": "Logout",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -129,20 +276,56 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/shopping-cart/items",
+					"raw": "http://localhost:8080/logout",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"shopping-cart",
-						"items"
+						"logout"
 					]
 				},
-				"description": "Afficher le contenu du panier"
+				"description": "déconnexion à un compte utilisateur"
 			},
 			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "user2",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "user2@nexio.com",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "20130e53-154b-4e0d-8561-3b4dc8f76a17",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "21c13a88-8e03-44fe-be9b-b7e2df2769f7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

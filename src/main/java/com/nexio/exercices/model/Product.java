@@ -25,7 +25,7 @@ public class Product {
     @JoinColumn(unique = true)
     private ProductDetails productDetails;
 
-    Product() {
+    public Product() {
         this("Pas de produit", BigDecimal.ZERO);
     }
 

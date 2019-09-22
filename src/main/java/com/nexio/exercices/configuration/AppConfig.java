@@ -49,7 +49,7 @@ public class AppConfig implements ApplicationRunner {
 
     @Bean
     public DataGenerator dataGenerator() {
-        return new DataGenerator(DEFAULT_LOCALE);
+        return new DataGenerator(DEFAULT_LOCALE, modelMapper());
     }
 
     @Override

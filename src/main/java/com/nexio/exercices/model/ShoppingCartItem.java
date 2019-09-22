@@ -1,6 +1,7 @@
 package com.nexio.exercices.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.Objects;
 
@@ -16,12 +17,17 @@ public class ShoppingCartItem {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
+    @NotNull
+
+    private String username;
+
     public ShoppingCartItem() {
     }
 
-    public ShoppingCartItem(Product product, Integer quantity) {
+    public ShoppingCartItem(Product product, Integer quantity, String username) {
         this.product = product;
         this.quantity = quantity;
+        this.username = username;
     }
 
     public Long getId() {
@@ -52,10 +58,18 @@ public class ShoppingCartItem {
         this.quantity = quantity;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return String.format(
-                "ShopingCart item {product: %s, quantity: %d}",
+                "ShoppingCart item {product: %s, quantity: %d}",
                 getProduct(),
                 getQuantity()
         );

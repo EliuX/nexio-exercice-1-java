@@ -1,6 +1,5 @@
 package com.nexio.exercices.controller;
 
-import com.nexio.exercices.configuration.Roles;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.model.ShoppingCartItem;
 import com.nexio.exercices.persistence.ProductRepository;
@@ -19,6 +18,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,12 +37,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(roles = Roles.USER)
-public class ShoppingCartItemControllerTest {
+@WithMockUser(username = "user")
+public class ShoppingCartControllerTest {
 
     @Autowired
     private MockMvc mvc;
-    
+
     @Autowired
     private DataGenerator dataGenerator;
 
@@ -67,11 +69,12 @@ public class ShoppingCartItemControllerTest {
         existingProduct.setId(7L);
 
         existingShoppingCartItem =
-                dataGenerator.generateShoppingCartItem(existingProduct);
+                dataGenerator.generateShoppingCartItem(existingProduct, "user");
         existingShoppingCartItem.setQuantity(1);
 
         when(productRepository.findById(7L)).thenReturn(Optional.of(existingProduct));
-        when(shoppingCartItemRepository.findByProductId(7L)).thenReturn(Optional.of(existingShoppingCartItem));
+        when(shoppingCartItemRepository.findByProductIdAndUsername(7L, "user"))
+                .thenReturn(Optional.of(existingShoppingCartItem));
     }
 
     @Test
@@ -82,7 +85,7 @@ public class ShoppingCartItemControllerTest {
 
         when(productRepository.findById(7L))
                 .thenReturn(Optional.of(existingProduct));
-        when(shoppingCartItemRepository.findByProductId(7L))
+        when(shoppingCartItemRepository.findByProductIdAndUsername(7L, "user"))
                 .thenReturn(Optional.empty());
 
         mvc.perform(put("/shopping-cart/items")
@@ -91,8 +94,17 @@ public class ShoppingCartItemControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.new").doesNotExist())
-                .andExpect(jsonPath("$.productId", is(7)))
-                .andExpect(jsonPath("$.quantity", is(1)));
+                .andExpect(jsonPath("$.product.id", is(7)))
+                .andExpect(jsonPath("$.quantity", is(1)))
+                .andExpect(jsonPath(
+                        "$.totalPrice",
+                        is(BigDecimal.valueOf(1)
+                                .multiply(existingProduct.getPrice())
+                                .doubleValue())
+                ));
+
+        verify(shoppingCartItemRepository, times(1))
+                .save(new ShoppingCartItem(existingProduct, 1, "user"));
     }
 
     @Test
@@ -101,12 +113,12 @@ public class ShoppingCartItemControllerTest {
         final Product existingProduct = dataGenerator.generateProduct(true);
         existingProduct.setId(1L);
         final ShoppingCartItem existingShoppingCartItem =
-                dataGenerator.generateShoppingCartItem(existingProduct);
+                dataGenerator.generateShoppingCartItem(existingProduct, "user");
         existingShoppingCartItem.setQuantity(3);
 
         when(productRepository.findById(1L))
                 .thenReturn(Optional.of(existingProduct));
-        when(shoppingCartItemRepository.findByProductId(1L))
+        when(shoppingCartItemRepository.findByProductIdAndUsername(1L, "user"))
                 .thenReturn(Optional.of(existingShoppingCartItem));
 
         mvc.perform(put("/shopping-cart/items")
@@ -115,8 +127,14 @@ public class ShoppingCartItemControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.new").doesNotExist())
-                .andExpect(jsonPath("$.productId", is(1)))
-                .andExpect(jsonPath("$.quantity", is(4)));
+                .andExpect(jsonPath("$.product.id", is(1)))
+                .andExpect(jsonPath("$.quantity", is(4)))
+                .andExpect(jsonPath(
+                        "$.totalPrice",
+                        is(BigDecimal.valueOf(4)
+                                .multiply(existingProduct.getPrice())
+                                .doubleValue())
+                ));
     }
 
     @Test
@@ -141,7 +159,7 @@ public class ShoppingCartItemControllerTest {
                         .limit(COUNT_OF_EXISTING_ITEMS)
                         .collect(Collectors.toList());
 
-        when(shoppingCartItemRepository.findAll()).thenReturn(existingItems);
+        when(shoppingCartItemRepository.findAllByUsername("user")).thenReturn(existingItems);
 
         final Product productFirstItem = existingItems.get(0).getProduct();
 
@@ -149,9 +167,19 @@ public class ShoppingCartItemControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(COUNT_OF_EXISTING_ITEMS)))
-                .andExpect(jsonPath("$[0].productId", is(productFirstItem.getId())))
-                .andExpect(jsonPath("$[0].productName", is(productFirstItem.getName())))
-                .andExpect(jsonPath("$[0].quantity", is(existingItems.get(0).getQuantity())));
+                .andExpect(jsonPath("$[0].product.id", is(productFirstItem.getId())))
+                .andExpect(jsonPath("$[0].product.name", is(productFirstItem.getName())))
+                .andExpect(jsonPath("$[0].product.price", is(productFirstItem.getPrice().doubleValue())))
+                .andExpect(jsonPath(
+                        "$[0].totalPrice",
+                        is(BigDecimal.valueOf(existingItems.get(0).getQuantity())
+                                .multiply(productFirstItem.getPrice())
+                                .doubleValue())
+                ))
+                .andExpect(jsonPath(
+                        "$[0].quantity",
+                        is(existingItems.get(0).getQuantity())
+                ));
     }
 
     @Test
@@ -161,8 +189,14 @@ public class ShoppingCartItemControllerTest {
                 .content("{\"productId\": \"7\"}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.productId", is(7)))
-                .andExpect(jsonPath("$.productName", is(existingProduct.getName())))
+                .andExpect(jsonPath("$.product").exists())
+                .andExpect(jsonPath("$.product.id", is(7)))
+                .andExpect(jsonPath("$.product.name", is(existingProduct.getName())))
+                .andExpect(jsonPath(
+                        "$.product.price",
+                        is((existingProduct.getPrice().doubleValue()))
+                ))
+                .andExpect(jsonPath("$.totalPrice", is(0d)))
                 .andExpect(jsonPath("$.quantity", is(0)));
 
         verify(shoppingCartItemRepository, times(1))
@@ -183,6 +217,75 @@ public class ShoppingCartItemControllerTest {
 
     private ShoppingCartItem createNewShoppingCartItem() {
         final Product product = dataGenerator.generateProduct(false);
-        return dataGenerator.generateShoppingCartItem(product);
+        return dataGenerator.generateShoppingCartItem(product, "user");
+    }
+
+    @Test
+    public void givenEmptyJsonRequest_whenAddItemOfProduct_thenReturn400() throws Exception {
+        mvc.perform(put("/shopping-cart/items")
+                .content("{ }")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void givenNoItems_whenGetContent_thenReturnEmptyResponse() throws Exception {
+        when(shoppingCartItemRepository.findAllByUsername("user")).thenReturn(Collections.emptyList());
+
+        mvc.perform(get("/shopping-cart")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items").exists())
+                .andExpect(jsonPath("$.items").isEmpty())
+                .andExpect(jsonPath("$.totalPrice").exists())
+                .andExpect(jsonPath("$.totalPrice", is(0)));
+    }
+
+    @Test
+    public void givenExistingItemsWithPrices_whenGetContent_thenReturnListOfItemsAndTotalPrice()
+            throws Exception {
+        final ShoppingCartItem item1 = generateShoppingCartItemToCalculateTotalPrice(
+                2, BigDecimal.valueOf(15)
+        );
+        final ShoppingCartItem item2 = generateShoppingCartItemToCalculateTotalPrice(
+                40, BigDecimal.valueOf(0.25)
+        );
+        final ShoppingCartItem item3 = generateShoppingCartItemToCalculateTotalPrice(
+                1, BigDecimal.valueOf(9.50)
+        );
+        final ShoppingCartItem item4 = generateShoppingCartItemToCalculateTotalPrice(
+                1, BigDecimal.valueOf(47.32)
+        );
+        final ShoppingCartItem item5 = generateShoppingCartItemToCalculateTotalPrice(
+                1, BigDecimal.valueOf(0.50)
+        );
+        final ShoppingCartItem item6 = generateShoppingCartItemToCalculateTotalPrice(
+                1, BigDecimal.valueOf(10)
+        );
+
+
+        when(shoppingCartItemRepository.findAllByUsername("user")).thenReturn(Arrays.asList(
+                item1, item2, item3, item4, item5, item6
+        ));
+
+        mvc.perform(get("/shopping-cart")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items", hasSize(6)))
+                .andExpect(jsonPath("$.totalPrice", is(107.32)));
+    }
+
+
+    private ShoppingCartItem generateShoppingCartItemToCalculateTotalPrice(
+            Integer quantity, BigDecimal productPrice
+    ) {
+        final ShoppingCartItem item = new ShoppingCartItem();
+        item.setQuantity(quantity);
+
+        final Product product = new Product();
+        product.setPrice(productPrice);
+        item.setProduct(product);
+
+        return item;
     }
 }
