@@ -1,7 +1,7 @@
 package com.nexio.exercices.controller;
 
-import com.nexio.exercices.dto.ShoppingCartDto;
 import com.nexio.exercices.dto.ShoppingCartItemChangeDto;
+import com.nexio.exercices.dto.ShoppingCartDto;
 import com.nexio.exercices.dto.ShoppingCartItemDto;
 import com.nexio.exercices.exception.NotFoundException;
 import com.nexio.exercices.service.ShoppingCartItemService;
@@ -29,9 +29,10 @@ public class ShoppingCartController {
     public ResponseEntity<ShoppingCartItemDto> addNewItemOfProduct(
             @Valid @RequestBody ShoppingCartItemChangeDto newItemRequestBody
     ) {
-        final ShoppingCartItemDto appliedChangeDto = shoppingCartItemService.addOneItemOfProduct(
-                newItemRequestBody.getProductId()
-        ).orElseThrow(() -> new NotFoundException("Produit introuvable"));
+        final ShoppingCartItemDto appliedChangeDto =
+                shoppingCartItemService.addOneItemOfProduct(
+                        newItemRequestBody.getProductId()
+                ).orElseThrow(() -> new NotFoundException("Produit introuvable"));
 
         return new ResponseEntity<>(appliedChangeDto,
                 appliedChangeDto.isNew() ? HttpStatus.CREATED : HttpStatus.OK);

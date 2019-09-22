@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -110,7 +111,9 @@ public class ShoppingCartItemServiceTest {
     public void shouldConvertModelToShoppingCartDto() {
         final Product product = dataGenerator.generateProduct(true);
         product.setId(7L);
-        final ShoppingCartItem model = dataGenerator.generateShoppingCartItem(product, "user");
+        final ShoppingCartItem model = dataGenerator.generateShoppingCartItem(
+                product, "user"
+        );
         model.setId(9L);
 
         final ShoppingCartItemDto dto =
@@ -121,6 +124,8 @@ public class ShoppingCartItemServiceTest {
         assertEquals(model.getQuantity(), dto.getQuantity());
         assertEquals(model.getProduct().getId(), dto.getProduct().getId());
         assertEquals(model.getProduct().getName(), dto.getProduct().getName());
+        assertEquals(model.getCreatedDate(), dto.getCreatedDate());
+        assertEquals(model.getLastModifiedDate(), dto.getLastModifiedDate());
     }
 
     @Test
@@ -129,6 +134,8 @@ public class ShoppingCartItemServiceTest {
         dto.setId(7L);
         dto.setProduct(dataGenerator.generateProductDto(true));
         dto.setQuantity(2);
+        dto.setCreatedDate(new Date());
+        dto.setLastModifiedDate(new Date());
 
         final ShoppingCartItem model =
                 shoppingCartItemService.convertFromShoppingCartDto(dto);
@@ -138,6 +145,8 @@ public class ShoppingCartItemServiceTest {
         assertEquals(dto.getQuantity(), model.getQuantity());
         assertEquals(dto.getProduct().getId(), model.getProduct().getId());
         assertEquals(dto.getProduct().getName(), model.getProduct().getName());
+        assertEquals(dto.getCreatedDate(), model.getCreatedDate());
+        assertEquals(dto.getLastModifiedDate(), model.getLastModifiedDate());
     }
 
     @Test
@@ -155,13 +164,13 @@ public class ShoppingCartItemServiceTest {
         final Optional<ShoppingCartItemDto> newShoppingCartItemDto =
                 shoppingCartItemService.removeOneItemOfProduct(existingProduct.getId());
 
-        verify(shoppingCartItemRepository, times(1)).delete(existingShoppingCartItem);
+        verify(shoppingCartItemRepository, times(1))
+                .delete(existingShoppingCartItem);
 
         assertNotNull(newShoppingCartItemDto);
         assertTrue(newShoppingCartItemDto.isPresent());
         assertThat(newShoppingCartItemDto.get().getQuantity(), equalTo(0));
     }
-
 
     @Test
     @WithMockUser(username = "user@nexio.com")

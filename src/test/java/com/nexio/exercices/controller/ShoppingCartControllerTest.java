@@ -96,6 +96,8 @@ public class ShoppingCartControllerTest {
                 .andExpect(jsonPath("$.new").doesNotExist())
                 .andExpect(jsonPath("$.product.id", is(7)))
                 .andExpect(jsonPath("$.quantity", is(1)))
+                .andExpect(jsonPath("$.createdDate").exists())
+                .andExpect(jsonPath("$.lastModifiedDate").exists())
                 .andExpect(jsonPath(
                         "$.totalPrice",
                         is(BigDecimal.valueOf(1)
@@ -129,6 +131,8 @@ public class ShoppingCartControllerTest {
                 .andExpect(jsonPath("$.new").doesNotExist())
                 .andExpect(jsonPath("$.product.id", is(1)))
                 .andExpect(jsonPath("$.quantity", is(4)))
+                .andExpect(jsonPath("$.createdDate").exists())
+                .andExpect(jsonPath("$.lastModifiedDate").exists())
                 .andExpect(jsonPath(
                         "$.totalPrice",
                         is(BigDecimal.valueOf(4)
@@ -159,7 +163,7 @@ public class ShoppingCartControllerTest {
                         .limit(COUNT_OF_EXISTING_ITEMS)
                         .collect(Collectors.toList());
 
-        when(shoppingCartItemRepository.findAllByUsername("user")).thenReturn(existingItems);
+        when(shoppingCartItemRepository.findByUsernameOrderByLastModifiedDateDesc("user")).thenReturn(existingItems);
 
         final Product productFirstItem = existingItems.get(0).getProduct();
 
@@ -197,6 +201,8 @@ public class ShoppingCartControllerTest {
                         is((existingProduct.getPrice().doubleValue()))
                 ))
                 .andExpect(jsonPath("$.totalPrice", is(0d)))
+                .andExpect(jsonPath("$.createdDate").exists())
+                .andExpect(jsonPath("$.lastModifiedDate").exists())
                 .andExpect(jsonPath("$.quantity", is(0)));
 
         verify(shoppingCartItemRepository, times(1))
@@ -230,7 +236,7 @@ public class ShoppingCartControllerTest {
 
     @Test
     public void givenNoItems_whenGetContent_thenReturnEmptyResponse() throws Exception {
-        when(shoppingCartItemRepository.findAllByUsername("user")).thenReturn(Collections.emptyList());
+        when(shoppingCartItemRepository.findByUsernameOrderByLastModifiedDateDesc("user")).thenReturn(Collections.emptyList());
 
         mvc.perform(get("/shopping-cart")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -264,7 +270,7 @@ public class ShoppingCartControllerTest {
         );
 
 
-        when(shoppingCartItemRepository.findAllByUsername("user")).thenReturn(Arrays.asList(
+        when(shoppingCartItemRepository.findByUsernameOrderByLastModifiedDateDesc("user")).thenReturn(Arrays.asList(
                 item1, item2, item3, item4, item5, item6
         ));
 

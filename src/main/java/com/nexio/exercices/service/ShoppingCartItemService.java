@@ -42,16 +42,16 @@ public class ShoppingCartItemService {
                 .map(this::convertToShoppingCartDto);
     }
 
-    public List<ShoppingCartItemDto> getAllItems() {
-        return shoppingCartItemRepository.findAllByUsername(currentUsername()).stream()
-                .map(this::convertToShoppingCartDto)
-                .collect(Collectors.toList());
-    }
-
     public ShoppingCartDto getContent() {
         ShoppingCartDto content = new ShoppingCartDto();
         content.setItems(getAllItems());
         return content;
+    }
+
+    public List<ShoppingCartItemDto> getAllItems() {
+        return shoppingCartItemRepository.findByUsernameOrderByLastModifiedDateDesc(currentUsername()).stream()
+                .map(this::convertToShoppingCartDto)
+                .collect(Collectors.toList());
     }
 
     protected ShoppingCartItemDto convertToShoppingCartDto(ShoppingCartItem model) {

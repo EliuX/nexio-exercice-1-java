@@ -60,6 +60,9 @@ ou pendant le démarche de l'appli:
 java -jar target/nexio-exercice1-dev.jar --data.number-of-products=20
 ```
 
+> Les produits que vous trouverez son des livres ou des ingrédients 
+> alimentaires 
+
 En outre, si vous voulez vous pouvez changer le packaging à `war` pour 
 [livrer l'applis dans un serveur comme le Tomcat][demarche-tomcat]. Le
 plugin `maven-war-plugin` est déjà configuré pour cet objectif.
@@ -96,24 +99,24 @@ se trouve ci-après :
 Dans ce projet on peut faire la connexion à un compte utilisateur des
 différents façons:
 
-1. Avec des appelles curl spécifiez les paramètres `username` and 
+- Avec des appelles curl spécifiez les paramètres `username` and 
 `password`:
 
 ```
 curl -i -X POST -d username=user -d password=user <<url securisé>>
 ```
 
-1. Si vous voulez faire juste des appels `GET` en utilisant un surfeur 
+- Si vous voulez faire juste des appels `GET` en utilisant un surfeur 
 web, authentiquez-vous dans l'address ci-après:
 
 > http://localhost:8080/login
 
-Mais si comme la plupart des personnes vous voulez utiliser un outil 
-comme Postman, pour faire toutes sortes des appels, vous devez suivre 
+- Mais si comme la plupart des développeurs de logiciels vous voulez 
+utiliser Postman, pour faire toutes sortes des appels, vous devez suivre 
 les prochains pas :
 
-1.	Authorization.
-2.	Choisir «Basic Auth » dans le champ « TYPE ».
+1.	Choisissez l'option «Authorization».
+2.	Choisissez «Basic Auth» dans le champ « TYPE ».
 3.	Spécifiez les authentifiants d’un des utilisateurs disponibles. 
 4.	Désormais vous pouvez exécuter n’importe quelle requête HTTP
 

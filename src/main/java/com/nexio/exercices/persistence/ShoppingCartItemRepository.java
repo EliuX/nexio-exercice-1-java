@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShoppingCartItemRepository extends CrudRepository<ShoppingCartItem, Long> {
+
     Optional<ShoppingCartItem> findByProductIdAndUsername(Long product, String username);
 
-    List<ShoppingCartItem> findAllByUsername(String username);
+    List<ShoppingCartItem> findByUsernameOrderByLastModifiedDateDesc(
+            String username
+    );
 }

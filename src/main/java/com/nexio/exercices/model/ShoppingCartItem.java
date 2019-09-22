@@ -1,12 +1,19 @@
 package com.nexio.exercices.model;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "shopping_cart_item")
+@EntityListeners(AuditingEntityListener.class)
 public class ShoppingCartItem {
     @Positive
     Integer quantity;
@@ -14,12 +21,20 @@ public class ShoppingCartItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @OneToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
 
-    @NotNull
-
+    @CreatedBy
+    @Column(nullable = false)
     private String username;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private Date createdDate;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private Date lastModifiedDate;
 
     public ShoppingCartItem() {
     }
@@ -28,6 +43,8 @@ public class ShoppingCartItem {
         this.product = product;
         this.quantity = quantity;
         this.username = username;
+        this.createdDate = new Date();
+        this.lastModifiedDate = this.createdDate;
     }
 
     public Long getId() {
@@ -66,6 +83,22 @@ public class ShoppingCartItem {
         this.username = username;
     }
 
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
     @Override
     public String toString() {
         return String.format(
@@ -95,12 +128,13 @@ public class ShoppingCartItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ShoppingCartItem that = (ShoppingCartItem) o;
-        return Objects.equals(getQuantity(), that.getQuantity()) &&
+        return  Objects.equals(getUsername(), that.getUsername()) &&
+                Objects.equals(getQuantity(), that.getQuantity()) &&
                 Objects.equals(getProduct(), that.getProduct());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getQuantity(), getProduct());
+        return Objects.hash(getUsername(), getQuantity(), getProduct());
     }
 }

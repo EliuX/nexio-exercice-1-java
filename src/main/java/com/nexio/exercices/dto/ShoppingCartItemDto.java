@@ -3,6 +3,7 @@ package com.nexio.exercices.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Optional;
 
 public class ShoppingCartItemDto {
@@ -12,6 +13,10 @@ public class ShoppingCartItemDto {
     private ProductDto product;
 
     private Integer quantity;
+
+    private Date createdDate;
+
+    private Date lastModifiedDate;
 
     public ShoppingCartItemDto() {
     }
@@ -38,6 +43,22 @@ public class ShoppingCartItemDto {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     @JsonIgnore
