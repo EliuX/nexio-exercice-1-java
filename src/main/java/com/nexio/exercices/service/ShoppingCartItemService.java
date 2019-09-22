@@ -6,6 +6,7 @@ import com.nexio.exercices.model.Product;
 import com.nexio.exercices.model.ShoppingCartItem;
 import com.nexio.exercices.persistence.ShoppingCartItemRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.nexio.exercices.persistence.JPASpecifications.belongsToActiveUser;
+import static org.springframework.data.domain.Sort.Order.desc;
 
 @Service
 public class ShoppingCartItemService {
@@ -49,7 +53,11 @@ public class ShoppingCartItemService {
     }
 
     public List<ShoppingCartItemDto> getAllItems() {
-        return shoppingCartItemRepository.findByUsernameOrderByLastModifiedDateDesc(currentUsername()).stream()
+        final List<ShoppingCartItem> allItemsForCurrentUser = shoppingCartItemRepository.findAll(
+                belongsToActiveUser(),
+                Sort.by(desc("lastModifiedDate"))
+        );
+        return allItemsForCurrentUser.stream()
                 .map(this::convertToShoppingCartDto)
                 .collect(Collectors.toList());
     }

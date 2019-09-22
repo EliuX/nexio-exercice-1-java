@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -163,7 +165,8 @@ public class ShoppingCartControllerTest {
                         .limit(COUNT_OF_EXISTING_ITEMS)
                         .collect(Collectors.toList());
 
-        when(shoppingCartItemRepository.findByUsernameOrderByLastModifiedDateDesc("user")).thenReturn(existingItems);
+        when(shoppingCartItemRepository.findAll(any(Specification.class), any(Sort.class)))
+                .thenReturn(existingItems);
 
         final Product productFirstItem = existingItems.get(0).getProduct();
 
@@ -236,7 +239,8 @@ public class ShoppingCartControllerTest {
 
     @Test
     public void givenNoItems_whenGetContent_thenReturnEmptyResponse() throws Exception {
-        when(shoppingCartItemRepository.findByUsernameOrderByLastModifiedDateDesc("user")).thenReturn(Collections.emptyList());
+        when(shoppingCartItemRepository.findAll(any(Specification.class), any(Sort.class)))
+                .thenReturn(Collections.emptyList());
 
         mvc.perform(get("/shopping-cart")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -269,10 +273,8 @@ public class ShoppingCartControllerTest {
                 1, BigDecimal.valueOf(10)
         );
 
-
-        when(shoppingCartItemRepository.findByUsernameOrderByLastModifiedDateDesc("user")).thenReturn(Arrays.asList(
-                item1, item2, item3, item4, item5, item6
-        ));
+        when(shoppingCartItemRepository.findAll(any(Specification.class), any(Sort.class)))
+                .thenReturn(Arrays.asList(item1, item2, item3, item4, item5, item6));
 
         mvc.perform(get("/shopping-cart")
                 .contentType(MediaType.APPLICATION_JSON))

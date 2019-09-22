@@ -1,6 +1,7 @@
 package com.nexio.exercices.persistence;
 
 import com.nexio.exercices.model.ShoppingCartItem;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.CrudRepository;
@@ -16,11 +17,8 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
-public interface ShoppingCartItemRepository extends CrudRepository<ShoppingCartItem, Long> {
+public interface ShoppingCartItemRepository extends CrudRepository<ShoppingCartItem, Long>
+        , JpaSpecificationExecutor {
 
     Optional<ShoppingCartItem> findByProductIdAndUsername(Long product, String username);
-
-    List<ShoppingCartItem> findByUsernameOrderByLastModifiedDateDesc(
-            String username
-    );
 }
