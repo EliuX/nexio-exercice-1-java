@@ -62,16 +62,19 @@ public class ProductServiceTest {
         Mockito.when(productRepository.findById(anyLong()))
                 .thenReturn(Optional.of(product));
 
-        final Optional<Product> foundItem = productService.findProductById(1L);
+        final Optional<Product> foundItem =
+                productService.findProductById(1L);
 
-        assertTrue("The result should not be null", foundItem.isPresent());
+        assertTrue("The result should not be null",
+                foundItem.isPresent());
     }
 
     @Test
     public void shouldConvertProductModelToDto() {
         final Product product = dataGenerator.generateProduct(true);
 
-        final ProductDto productDto = productService.convertToProductDto(product);
+        final ProductDto productDto =
+                productService.convertToProductDto(product);
 
         assertNotNull("The DTO should not be null", productDto);
         assertEquals(product.getId(), productDto.getId());

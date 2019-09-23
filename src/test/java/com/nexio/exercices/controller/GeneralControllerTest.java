@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MainControllerTest {
+public class GeneralControllerTest {
 
     @LocalServerPort
     private int port;
@@ -34,6 +34,6 @@ public class MainControllerTest {
         );
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(response.getBody(), containsString("Welcome"));
+        assertThat(response.getBody(), containsString("Bienvenue"));
     }
 }

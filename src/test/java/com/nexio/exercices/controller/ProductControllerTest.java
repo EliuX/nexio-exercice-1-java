@@ -1,6 +1,6 @@
 package com.nexio.exercices.controller;
 
-import com.nexio.exercices.configuration.Roles;
+import com.nexio.exercices.constant.Roles;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.persistence.ProductRepository;
 import com.nexio.exercices.utils.DataGenerator;
@@ -58,8 +58,6 @@ public class ProductControllerTest {
 
     @Test
     public void givenNoProducts_whenGetProductsCatalog_thenReturnEmptyJsonArray() throws Exception {
-        final Product product = dataGenerator.generateProduct(true);
-
         given(productRepository.findAll()).willReturn(Collections.emptyList());
 
         mvc.perform(get("/products")

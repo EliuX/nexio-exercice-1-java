@@ -1,5 +1,6 @@
 package com.nexio.exercices.configuration;
 
+import com.nexio.exercices.constant.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,19 +18,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
+        http.csrf().disable()
+                .httpBasic()
+                .realmName("NexioExercice1")
+                .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .httpBasic()
-                .realmName("NexioExercice1")
                 .and()
                 .formLogin()
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+
     }
 
     @Autowired

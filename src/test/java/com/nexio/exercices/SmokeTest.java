@@ -1,5 +1,6 @@
 package com.nexio.exercices;
 
+import com.nexio.exercices.controller.GeneralController;
 import com.nexio.exercices.controller.ProductController;
 import com.nexio.exercices.controller.ProductDetailsController;
 import com.nexio.exercices.controller.ShoppingCartController;
@@ -16,6 +17,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SmokeTest {
 
     @Autowired
+    private GeneralController generalController;
+
+    @Autowired
     private ProductController productController;
 
     @Autowired
@@ -26,6 +30,7 @@ public class SmokeTest {
 
     @Test
     public void shouldLoadContext() {
+        assertThat(generalController).isNotNull();
         assertThat(productController).isNotNull();
         assertThat(productDetailsController).isNotNull();
         assertThat(shoppingCartController).isNotNull();

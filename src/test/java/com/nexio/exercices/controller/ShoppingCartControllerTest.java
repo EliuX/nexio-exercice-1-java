@@ -155,9 +155,12 @@ public class ShoppingCartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(COUNT_OF_EXISTING_ITEMS)))
-                .andExpect(jsonPath("$[0].product.id", is(productFirstItem.getId())))
-                .andExpect(jsonPath("$[0].product.name", is(productFirstItem.getName())))
-                .andExpect(jsonPath("$[0].product.price", is(productFirstItem.getPrice().doubleValue())))
+                .andExpect(jsonPath("$[0].product.id",
+                        is(productFirstItem.getId())))
+                .andExpect(jsonPath("$[0].product.name",
+                        is(productFirstItem.getName())))
+                .andExpect(jsonPath("$[0].product.price",
+                        is(productFirstItem.getPrice().doubleValue())))
                 .andExpect(jsonPath(
                         "$[0].totalPrice",
                         is(BigDecimal.valueOf(existingItems.get(0).getQuantity())
@@ -179,7 +182,8 @@ public class ShoppingCartControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.product").exists())
                 .andExpect(jsonPath("$.product.id", is(7)))
-                .andExpect(jsonPath("$.product.name", is(existingProduct.getName())))
+                .andExpect(jsonPath("$.product.name",
+                        is(existingProduct.getName())))
                 .andExpect(jsonPath(
                         "$.product.price",
                         is((existingProduct.getPrice().doubleValue()))
@@ -211,7 +215,8 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-    public void givenEmptyJsonRequest_whenAddItemOfProduct_thenReturn400() throws Exception {
+    public void givenEmptyJsonRequest_whenAddItemOfProduct_thenReturn400()
+            throws Exception {
         mvc.perform(put("/shopping-cart/items")
                 .content("{ }")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -219,9 +224,11 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-    public void givenNoItems_whenGetContent_thenReturnEmptyResponse() throws Exception {
-        when(shoppingCartItemRepository.findAll(any(Specification.class), any(Sort.class)))
-                .thenReturn(Collections.emptyList());
+    public void givenNoItems_whenGetContent_thenReturnEmptyResponse()
+            throws Exception {
+        when(shoppingCartItemRepository.findAll(
+                any(Specification.class), any(Sort.class))
+        ).thenReturn(Collections.emptyList());
 
         mvc.perform(get("/shopping-cart")
                 .contentType(MediaType.APPLICATION_JSON))

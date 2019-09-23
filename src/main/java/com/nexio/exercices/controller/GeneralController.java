@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MainController {
+public class GeneralController {
 
     @RequestMapping("/")
     public String showWelcomeMessage() {
-        return "Welcome the solution of Nexio - Exercice 1";
+        return "Bienvenue à la solution de Nexio - Exercice 1";
     }
 }

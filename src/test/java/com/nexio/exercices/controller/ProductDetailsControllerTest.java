@@ -1,10 +1,9 @@
 package com.nexio.exercices.controller;
 
-import com.nexio.exercices.configuration.Roles;
+import com.nexio.exercices.constant.Roles;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.persistence.ProductDetailsRepository;
 import com.nexio.exercices.utils.DataGenerator;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -68,10 +66,5 @@ public class ProductDetailsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$").doesNotExist());
-    }
-
-    @After
-    public void resetMockBean() {
-        reset(productDetailsRepository);
     }
 }

@@ -9,7 +9,6 @@ public class ProductDetailsDto {
     private Boolean edible;
 
     public ProductDetailsDto() {
-
     }
 
     public Long getId() {

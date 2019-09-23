@@ -83,6 +83,38 @@
 			"response": []
 		},
 		{
+			"name": "PUT shopping-cart/item",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"productId\": 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/shopping-cart/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shopping-cart",
+						"items"
+					]
+				},
+				"description": " Ajouter un produit au panier"
+			},
+			"response": []
+		},
+		{
 			"name": "GET /shopping-cart",
 			"request": {
 				"method": "GET",
@@ -201,38 +233,6 @@
 					"body": null
 				}
 			]
-		},
-		{
-			"name": "PUT shopping-cart/item",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"productId\": 3\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8080/shopping-cart/items",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"shopping-cart",
-						"items"
-					]
-				},
-				"description": " Ajouter un produit au panier"
-			},
-			"response": []
 		},
 		{
 			"name": "DELETE shopping-cart/items",

@@ -1,5 +1,7 @@
 EXERCICE 1 JAVA
 ====================
+[![Build Status](https://travis-ci.com/EliuX/nexio-exercice-1-java.svg?branch=master)](https://travis-ci.com/EliuX/nexio-exercice-1-java)
+
 
 ## Énoncé
 
@@ -32,19 +34,19 @@ Vous serez évalué sur les points suivants:
 ### Installation
 
 Cet project utilise [Maven][maven-website] comme outil de gestion et 
-d'automatisation. Donc, pour installer et démarcher le projet suivez le 
-prochaines étapes:
+d'automatisation. Donc, pour installer le projet et lancer l'exécutable 
+suivez le prochaines étapes:
 
-1. Installez les dépendances    
+1. Installez les dépendances:  
 
 ```bash
 mvn clean install
 ```
 
-2. Exécutez l'application
+2. Exécutez l'application:
 
 Pour les essais automatiques le profile actif sera «test» et pendant 
-l’exécution du dossier `jar` le profile actif sera «dev». Avec le 
+l’exécution du fichier `JAR` le profile actif sera «dev». Avec le 
 profile «dev» l’application fera la génération automatique des _15_ 
 produits pour remplir la base de données dans la mémoire. Cependant, si 
 vous voulez changer cette quantité spécifiez le paramètre 
@@ -71,21 +73,23 @@ plugin `maven-war-plugin` est déjà configuré pour cet objectif.
 ### API REST
 Les scénarios disponibles sont les suivants:
 
-- Afficher un catalogue de produits: GET /products
-- Afficher le détail d’un produit: GET /products/{productId}/details
-- Afficher le contenu du panier: GET /shopping-cart
-- Afficher les articles du panier: GET /shopping-cart/items
-- Ajouter un produit au panier: PUT /shopping-cart/items
-- Enlever un produit du panier: DELETE /shopping-cart/items
-- Déconnexion à un compte utilisateur: GET /logout
+- Afficher un catalogue de produits: `GET` _/products_
+- Afficher le détail d’un produit: `GET` _/products/{productId}/details_
+- Afficher le contenu du panier: `GET` _/shopping-cart_
+- Afficher les articles du panier: `GET` _/shopping-cart/items_
+- Ajouter un produit au panier: `PUT` _/shopping-cart/items_
+    * `{ product_id: <id du produit> }`  
+- Enlever un produit du panier: `DELETE` _/shopping-cart/items_
+    * `{ product_id: <id du produit> }` 
+- Déconnexion à un compte utilisateur: `GET` _/logout_
 
-Il est recommandé utiliser la collection de Postman
-`Nexio - Exercice1.postman_collection.json`.
+Il est recommandé [utiliser][importing-postman-data] la collection de 
+Postman stockée dans `Nexio - Exercice1.postman_collection.json`.
 
 ### Securité
 Avec l’exception de la page d’accueil, les autres endpoints ont besoin 
-d’être connecté à un compte utilisateur. Les authentifiant disponibles 
-se trouve ci-après :
+de que vous soyez connecté à un compte utilisateur. Les authentifiants
+disponibles se trouvent ci-après :
 		
 
 |Nom d’utilisateur   |Mot de passe|Role   |
@@ -94,31 +98,32 @@ se trouve ci-après :
 |user2@nexio.com     |user2       | USER  |
 |admin@nexio.com     |admin       | ADMIN |
 
+
 #### Connexion à un compte utilisateur
 
 Dans ce projet on peut faire la connexion à un compte utilisateur des
 différents façons:
 
-- Avec des appelles curl spécifiez les paramètres `username` and 
-`password`:
+- CURL: Pour faire des appelles curl spécifiez les paramètres `username` 
+and `password`:
 
 ```
 curl -i -X POST -d username=user -d password=user <<url securisé>>
 ```
 
-- Si vous voulez faire juste des appels `GET` en utilisant un surfeur 
-web, authentiquez-vous dans l'address ci-après:
+- Surfeur web: Si vous voulez faire juste des appels `GET` en utilisant 
+un surfeur web, authentiquez-vous dans l'address ci-après:
 
 > http://localhost:8080/login
 
-- Mais si comme la plupart des développeurs de logiciels vous voulez 
-utiliser Postman, pour faire toutes sortes des appels, vous devez suivre 
-les prochains pas :
+- Postman: En outre, si comme la plupart des développeurs vous utiliser 
+Postman pour faire toutes sortes des appels, vous devez suivre les 
+prochains pas :
 
 1.	Choisissez l'option «Authorization».
 2.	Choisissez «Basic Auth» dans le champ « TYPE ».
 3.	Spécifiez les authentifiants d’un des utilisateurs disponibles. 
-4.	Désormais vous pouvez exécuter n’importe quelle requête HTTP
+4.	Désormais vous pouvez exécuter n’importe quelle requête HTTP.
 
 
 ### Author
@@ -129,3 +134,4 @@ Visitez ma [page LinkedIn][linkedin-page] pour en savoir plus sur moi.
 [maven-website]: https://maven.apache.org/
 [linkedin-page]: https://www.linkedin.com/in/eliecer-hern%C3%A1ndez-garbey-16172686/
 [demarche-tomcat]: https://tomcat.apache.org/tomcat-8.0-doc/deployer-howto.html#Deployment_on_Tomcat_startup
+[importing-postman-data]: https://learning.getpostman.com/docs/postman/collections/data_formats/#importing-postman-data

@@ -26,7 +26,7 @@ public class ProductDetailsServiceTest {
 
     @MockBean
     ProductDetailsRepository productDetailsRepository;
-    
+
     @Autowired
     private DataGenerator dataGenerator;
 
@@ -61,15 +61,20 @@ public class ProductDetailsServiceTest {
 
     @Test
     public void shouldConvertProductDetailsModelToDto() {
-        final Product product = dataGenerator.generateProductWithDetails(true);
+        final Product product =
+                dataGenerator.generateProductWithDetails(true);
 
         final ProductDetailsDto productDetailsDto =
-                productDetailsService.convertToProductDetailsDto(product.getProductDetails());
-
+                productDetailsService.convertToProductDetailsDto(
+                        product.getProductDetails()
+                );
 
         assertNotNull("The DTO should not be null", productDetailsDto);
-        assertEquals(product.getProductDetails().getId(), productDetailsDto.getId());
-        assertEquals(product.getProductDetails().getEdible(), productDetailsDto.getEdible());
-        assertEquals(product.getProductDetails().getDescription(), productDetailsDto.getDescription());
+        assertEquals(product.getProductDetails().getId(),
+                productDetailsDto.getId());
+        assertEquals(product.getProductDetails().getEdible(),
+                productDetailsDto.getEdible());
+        assertEquals(product.getProductDetails().getDescription(),
+                productDetailsDto.getDescription());
     }
 }

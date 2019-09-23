@@ -1,5 +1,6 @@
 package com.nexio.exercices.configuration;
 
+import com.nexio.exercices.constant.Profiles;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.persistence.ProductRepository;
 import com.nexio.exercices.utils.DataGenerator;
@@ -73,8 +74,8 @@ public class AppConfig implements ApplicationRunner {
             final Product savedProduct = productRepository.save(product);
             LOG.info(String.format(
                     "Le produit \"%s\" a été ajouté avec succès",
-                    savedProduct)
-            );
+                    savedProduct
+            ));
         }
     }
 

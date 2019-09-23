@@ -157,7 +157,8 @@ public class ShoppingCartItemServiceTest {
                 dataGenerator.generateShoppingCartItem(existingProduct, "user");
         existingShoppingCartItem.setQuantity(1);
 
-        when(productService.findProductById(7L)).thenReturn(Optional.of(existingProduct));
+        when(productService.findProductById(7L))
+                .thenReturn(Optional.of(existingProduct));
         when(shoppingCartItemRepository.findByProductIdAndCurrentUser(7L))
                 .thenReturn(Optional.of(existingShoppingCartItem));
 

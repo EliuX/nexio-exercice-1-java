@@ -6,7 +6,7 @@
 
     <artifactId>nexio-exercice1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>Exercice 1 pour Nexio</name>
     <description>Test Java pour Nexio</description>
@@ -61,6 +61,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
         <!-- Pour SPEL -->
         <dependency>
             <groupId>org.springframework.security</groupId>

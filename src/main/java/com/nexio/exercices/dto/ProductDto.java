@@ -12,7 +12,6 @@ public class ProductDto {
     private BigDecimal price;
 
     public ProductDto() {
-
     }
 
     public Long getId() {

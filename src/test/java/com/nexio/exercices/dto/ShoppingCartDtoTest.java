@@ -36,7 +36,7 @@ public class ShoppingCartDtoTest {
 
     private ShoppingCartItemDto generateShoppingCartItemDtoToCalculateTotalPrice(
             Integer quantity, BigDecimal productPrice
-    ){
+    ) {
         final ShoppingCartItemDto itemDto = new ShoppingCartItemDto();
         itemDto.setQuantity(quantity);
 

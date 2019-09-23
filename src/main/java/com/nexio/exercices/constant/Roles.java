@@ -1,4 +1,4 @@
-package com.nexio.exercices.configuration;
+package com.nexio.exercices.constant;
 
 public class Roles {
     public static final String USER = "USER";

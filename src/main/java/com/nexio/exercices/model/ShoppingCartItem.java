@@ -124,7 +124,7 @@ public class ShoppingCartItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ShoppingCartItem that = (ShoppingCartItem) o;
-        return  Objects.equals(getUsername(), that.getUsername()) &&
+        return Objects.equals(getUsername(), that.getUsername()) &&
                 Objects.equals(getQuantity(), that.getQuantity()) &&
                 Objects.equals(getProduct(), that.getProduct());
     }
