@@ -1,14 +1,13 @@
 package com.nexio.exercices.dto;
 
-import com.github.javafaker.Faker;
 import com.nexio.exercices.utils.DataGenerator;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class ShoppingCartItemDtoTest {
 

@@ -7,8 +7,6 @@ import com.nexio.exercices.model.ShoppingCartItem;
 import com.nexio.exercices.persistence.ShoppingCartItemRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,10 +51,11 @@ public class ShoppingCartItemService {
     }
 
     public List<ShoppingCartItemDto> getAllItems() {
-        final List<ShoppingCartItem> allItemsForCurrentUser = shoppingCartItemRepository.findAll(
-                belongsToActiveUser(),
-                Sort.by(desc("lastModifiedDate"))
-        );
+        final List<ShoppingCartItem> allItemsForCurrentUser =
+                shoppingCartItemRepository.findAll(
+                        belongsToActiveUser(),
+                        Sort.by(desc("lastModifiedDate"))
+                );
         return allItemsForCurrentUser.stream()
                 .map(this::convertToShoppingCartDto)
                 .collect(Collectors.toList());
@@ -70,14 +69,12 @@ public class ShoppingCartItemService {
         return modelMapper.map(dto, ShoppingCartItem.class);
     }
 
-    private ShoppingCartItem incrementShoppingCartQuantityForProduct(
-            Product product
-    ) {
+    private ShoppingCartItem incrementShoppingCartQuantityForProduct(Product product) {
         final ShoppingCartItem currentShoppingCartItem =
-                shoppingCartItemRepository.findByProductIdAndUsername(
-                        product.getId(), currentUsername()
+                shoppingCartItemRepository.findByProductIdAndCurrentUser(
+                        product.getId()
                 ).orElseGet(() -> new ShoppingCartItem(
-                        product, 0, currentUsername()
+                        product, 0
                 ));
 
         return saveUpdatedShoppingCartItem(
@@ -88,8 +85,8 @@ public class ShoppingCartItemService {
     private Optional<ShoppingCartItem> decreaseShoppingCartQuantityForProduct(
             Long productId
     ) {
-        return shoppingCartItemRepository.findByProductIdAndUsername(
-                productId, currentUsername()
+        return shoppingCartItemRepository.findByProductIdAndCurrentUser(
+                productId
         )
                 .map(ShoppingCartItem::decreaseQuantityAndGet)
                 .map(this::saveUpdatedShoppingCartItem);
@@ -97,24 +94,10 @@ public class ShoppingCartItemService {
 
     private ShoppingCartItem saveUpdatedShoppingCartItem(ShoppingCartItem item) {
         if (item.isEmpty()) {
-            // TODO Filter by username
             shoppingCartItemRepository.delete(item);
             return item;
         } else {
-            return saveShoppingCartItemForCurrentUser(item);
+            return shoppingCartItemRepository.save(item);
         }
-    }
-
-    private ShoppingCartItem saveShoppingCartItemForCurrentUser(ShoppingCartItem item) {
-        if (item.getUsername() == null) {
-            item.setUsername(currentUsername());
-        }
-        return shoppingCartItemRepository.save(item);
-    }
-
-    String currentUsername() {
-        final UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        return userDetails.getUsername();
     }
 }

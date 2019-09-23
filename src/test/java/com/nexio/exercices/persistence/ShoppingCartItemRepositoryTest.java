@@ -1,5 +1,6 @@
 package com.nexio.exercices.persistence;
 
+import com.nexio.exercices.configuration.JpaConfig;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.model.ShoppingCartItem;
 import com.nexio.exercices.utils.DataGenerator;
@@ -9,8 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -26,7 +27,7 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@EnableJpaAuditing
+@Import(JpaConfig.class)
 @WithMockUser(username = "testuser")
 public class ShoppingCartItemRepositoryTest {
 
@@ -39,10 +40,10 @@ public class ShoppingCartItemRepositoryTest {
     private DataGenerator dataGenerator = new DataGenerator();
 
     @Test
-    public void shouldSaveShoppingCartOfAUser() {
+    public void shouldSaveShoppingCartItemForTheCurrentUser() {
         final Product product = dataGenerator.generateProduct(true);
         final ShoppingCartItem shoppingCartItem =
-                dataGenerator.generateShoppingCartItem(product, "testuser");
+                dataGenerator.generateShoppingCartItem(product, "anotheruser");
 
         entityManager.persist(product);
         final ShoppingCartItem savedShoppingCart =
@@ -57,42 +58,24 @@ public class ShoppingCartItemRepositoryTest {
         );
 
         assertThat(foundShoppingCartItem, equalTo(savedShoppingCart));
+        assertThat(foundShoppingCartItem.getUsername(), equalTo("testuser"));
     }
 
     @Test
     public void shouldFindShoppingCartItemByValidProductIdAndUsername() {
         final ShoppingCartItem shoppingCartItem = createNewShoppingCartItem();
-
         final Long productId = (Long) entityManager.persistAndGetId(
                 shoppingCartItem.getProduct()
         );
         final ShoppingCartItem savedItem = shoppingCartItemRepository.save(shoppingCartItem);
 
         final Optional<ShoppingCartItem> foundItem =
-                shoppingCartItemRepository.findByProductIdAndUsername(productId, "testuser");
+                shoppingCartItemRepository.findByProductIdAndCurrentUser(productId);
 
         assertTrue("The saved item should be found", foundItem.isPresent());
         assertEquals(foundItem.get().getId(), savedItem.getId());
         assertEquals(foundItem.get().getProduct().getId(), productId);
         assertEquals(foundItem.get().getUsername(), "testuser");
-    }
-
-    @Test
-    public void shouldNotFindShoppingCartItemByInvalidUsername() {
-        final ShoppingCartItem item = createNewShoppingCartItem();
-
-        final Long productId = (Long) entityManager.persistAndGetId(
-                item.getProduct()
-        );
-        shoppingCartItemRepository.save(item);
-
-        final Optional<ShoppingCartItem> foundItem =
-                shoppingCartItemRepository.findByProductIdAndUsername(productId, "invaliduser");
-
-        assertFalse(
-                "The previously saved item should not be found",
-                foundItem.isPresent()
-        );
     }
 
     @Test
@@ -132,7 +115,7 @@ public class ShoppingCartItemRepositoryTest {
         lastItemToChange.setQuantity(7);
         shoppingCartItemRepository.save(lastItemToChange);
 
-        final List<ShoppingCartItem> updateItems =  shoppingCartItemRepository.findAll(
+        final List<ShoppingCartItem> updateItems = shoppingCartItemRepository.findAll(
                 belongsToActiveUser(),
                 Sort.by(Sort.Order.desc("lastModifiedDate"))
         );

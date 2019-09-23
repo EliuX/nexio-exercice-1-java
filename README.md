@@ -57,7 +57,7 @@ data.number-of-products=20
 ou pendant le démarche de l'appli:
 
 ```bash
-java -jar target/nexio-exercice1-dev.jar --data.number-of-products=20
+java -jar target/nexio-exercice1.jar --data.number-of-products=20
 ```
 
 > Les produits que vous trouverez son des livres ou des ingrédients 

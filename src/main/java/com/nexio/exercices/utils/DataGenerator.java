@@ -62,6 +62,6 @@ public class DataGenerator {
 
     public ShoppingCartItem generateShoppingCartItem(Product product, String username) {
         final Integer quantity = faker.number().numberBetween(1, 100);
-        return new ShoppingCartItem(product, quantity, username);
+        return new ShoppingCartItem(product, quantity);
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.Date;
 import java.util.Objects;
@@ -39,12 +38,9 @@ public class ShoppingCartItem {
     public ShoppingCartItem() {
     }
 
-    public ShoppingCartItem(Product product, Integer quantity, String username) {
+    public ShoppingCartItem(Product product, Integer quantity) {
         this.product = product;
         this.quantity = quantity;
-        this.username = username;
-        this.createdDate = new Date();
-        this.lastModifiedDate = this.createdDate;
     }
 
     public Long getId() {

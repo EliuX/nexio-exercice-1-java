@@ -1,6 +1,5 @@
 package com.nexio.exercices.utils;
 
-import com.nexio.exercices.configuration.AppConfig;
 import com.nexio.exercices.dto.ProductDto;
 import com.nexio.exercices.model.Product;
 import com.nexio.exercices.model.ShoppingCartItem;
@@ -143,8 +142,8 @@ public class DataGeneratorTest {
                 shoppingCartItem.getProduct()
         );
 
-        Assert.assertNotNull(
-                "The username of the item should be user",
+        Assert.assertNull(
+                "The username should not be initially set",
                 shoppingCartItem.getUsername()
         );
     }

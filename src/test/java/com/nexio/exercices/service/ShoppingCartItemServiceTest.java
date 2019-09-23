@@ -57,7 +57,7 @@ public class ShoppingCartItemServiceTest {
 
         when(productService.findProductById(anyLong()))
                 .thenReturn(Optional.of(product));
-        when(shoppingCartItemRepository.findByProductIdAndUsername(7L, "users"))
+        when(shoppingCartItemRepository.findByProductIdAndCurrentUser(7L))
                 .thenReturn(Optional.empty());
 
         final Optional<ShoppingCartItemDto> shoppingCartItemDto
@@ -80,7 +80,7 @@ public class ShoppingCartItemServiceTest {
 
         when(productService.findProductById(anyLong()))
                 .thenReturn(Optional.of(product));
-        when(shoppingCartItemRepository.findByProductIdAndUsername(7L, "user"))
+        when(shoppingCartItemRepository.findByProductIdAndCurrentUser(7L))
                 .thenReturn(Optional.of(model));
 
         final Optional<ShoppingCartItemDto> shoppingCartItemDto
@@ -158,7 +158,7 @@ public class ShoppingCartItemServiceTest {
         existingShoppingCartItem.setQuantity(1);
 
         when(productService.findProductById(7L)).thenReturn(Optional.of(existingProduct));
-        when(shoppingCartItemRepository.findByProductIdAndUsername(7L, "user"))
+        when(shoppingCartItemRepository.findByProductIdAndCurrentUser(7L))
                 .thenReturn(Optional.of(existingShoppingCartItem));
 
         final Optional<ShoppingCartItemDto> newShoppingCartItemDto =
@@ -170,15 +170,5 @@ public class ShoppingCartItemServiceTest {
         assertNotNull(newShoppingCartItemDto);
         assertTrue(newShoppingCartItemDto.isPresent());
         assertThat(newShoppingCartItemDto.get().getQuantity(), equalTo(0));
-    }
-
-    @Test
-    @WithMockUser(username = "user@nexio.com")
-    public void shouldReturnActiveUser() {
-        assertEquals(
-                "Expected to return username of active user",
-                "user@nexio.com",
-                shoppingCartItemService.currentUsername()
-        );
     }
 }

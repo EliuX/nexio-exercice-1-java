@@ -1,11 +1,8 @@
 package com.nexio.exercices.service;
 
 import com.nexio.exercices.dto.ProductDetailsDto;
-import com.nexio.exercices.dto.ProductDto;
 import com.nexio.exercices.model.Product;
-import com.nexio.exercices.model.ProductDetails;
 import com.nexio.exercices.persistence.ProductDetailsRepository;
-import com.nexio.exercices.persistence.ProductRepository;
 import com.nexio.exercices.utils.DataGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,12 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 
